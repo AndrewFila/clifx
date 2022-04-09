@@ -48,7 +48,7 @@ struct colpl_t {
 //standard message size 36
 struct stdmsg_t {
     struct header_t header;
-}
+};
 
 //power message size 42
 struct powmsg_t {

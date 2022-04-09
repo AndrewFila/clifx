@@ -16,7 +16,6 @@ clifx::clifx(){
     servaddr.sin_family      = AF_INET;
     servaddr.sin_port        = htons(LIFX_PORT);
     servaddr.sin_addr.s_addr = INADDR_BROADCAST;
-    std::cout << "Socket Created" << std::endl;
 }
 
 clifx::~clifx(){
@@ -58,11 +57,10 @@ void clifx::setLightPower(bool onOff, uint32_t duration, uint8_t target[8]){
     msg.payload.duration = duration;
     int len = sendto(sockfd, &msg, sizeof(msg), 0, (const struct sockaddr *)&servaddr, sizeof(servaddr));
     if (len < 0){
-        perror("Error in sending message");
+        perror("Error in sending power message");
         close(sockfd);
         exit(EXIT_FAILURE);
     }
-    std::cout << len << std::endl;
 }
 
 
@@ -78,7 +76,7 @@ void clifx::setColor(uint16_t hue, float saturation, float brightness, uint16_t 
     msg.payload.duration    = duration;
     int len = sendto(sockfd, &msg, sizeof(msg), 0, (const struct sockaddr *)&servaddr, sizeof(servaddr));
     if (len < 0){
-        perror("Error in sending message");
+        perror("Error in sending color message");
         close(sockfd);
         exit(EXIT_FAILURE);
     }

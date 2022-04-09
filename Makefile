@@ -1,14 +1,14 @@
 CC			= c++
 FLAGS		=
 CFLAGS		= -g -O2 -Wno-write-strings -Wno-cpp -w -lm
-OBJ_FILE	= main.o clifx.o
-EXE_FILE	= lifxlan
+OBJ_FILE	= cliApp.o clifx.o
+EXE_FILE	= clifx
 
 ${EXE_FILE}: ${OBJ_FILE}
 	${CC} ${FLAGS} -o ${EXE_FILE} ${OBJ_FILE}
 
-main.o: main.cpp
-	${CC} ${CFLAGS} -c main.cpp
+cliApp.o: cliApp.cpp
+	${CC} ${CFLAGS} -c cliApp.cpp
 
 clifx.o: clifx.cpp
 	${CC} ${CFLAGS} -c clifx.cpp
