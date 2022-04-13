@@ -1,6 +1,6 @@
 # clifx
 
-**description**
+**Description**
 
 clifx is an implementation of the [lifx LAN protocol](https://lan.developer.lifx.com/docs) written in C++ for unix systems. Clifx has been only tested on 
 arch linux, support for other operating systems is a plan for the future.
