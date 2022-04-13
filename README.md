@@ -35,7 +35,7 @@ void setCOlor(uint16_t hue, float saturation, float brightness, uint16_t kelvin,
 
 **Examples**
 
-`
+```
 //example.cpp
 //program to turn on all lights and set the color to green at 100% saturation and 50% brightness.
 
@@ -52,4 +52,4 @@ int main(){
   lightController.~clifx(); //deconstructor, closes our udp socket created by the constructor.
   exit(SUCCESS);
 }
-`
+```
