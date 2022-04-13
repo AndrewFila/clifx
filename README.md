@@ -20,12 +20,12 @@ arch linux, support for other operating systems is a plan for the future.
 
 **available functions**
 
-void setLightPower(bool onOff, uint32_t duration, uint8_t target[8])
+`void setLightPower(bool onOff, uint32_t duration, uint8_t target[8])`
 - onOff -- a boolian value that determines the power state of the device. <1 -- on, 0 -- off>
 - duration -- the time in miliseconds to turn on. 
 - target -- device to be targeted (see example for more information)
 
-void setCOlor(uint16_t hue, float saturation, float brightness, uint16_t kelvin, uint32_t duration, uint8_t target[8])
+`void setCOlor(uint16_t hue, float saturation, float brightness, uint16_t kelvin, uint32_t duration, uint8_t target[8])`
 - hue -- the color to set the light in HSBK <int 0 - 360>
 - saturation -- the saturation of the color <float 0.0 - 1.0>
 - brightness -- the brightness of the divice <float 0.0 - 1.0>
