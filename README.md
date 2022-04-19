@@ -2,13 +2,14 @@
 
 **Description**
 
-clifx is an implementation of the [lifx LAN protocol](https://lan.developer.lifx.com/docs) written in C++ for unix systems. Clifx has been only tested on 
+clifx is an implementation of the [lifx LAN protocol](https://lan.developer.lifx.com/docs) written in C++ for unix systems. Clifx has been only tested on
 arch linux, support for other operating systems is a plan for the future.
 
 **Functionality**
 
 - Setting the power state of lifx lights on the local network
 - Setting color, brightness, saturation, and kelvin level of lights as well as the duration of change.
+- Setting a waveform for lights. see [waveforms](https://lan.developer.lifx.com/docs/waveforms) for more information
 - A command line application capible of using the above functionality
 
 **Future Plans**
@@ -22,7 +23,7 @@ arch linux, support for other operating systems is a plan for the future.
 
 `void setLightPower(bool onOff, uint32_t duration, uint8_t target[8])`
 - onOff -- a boolian value that determines the power state of the device. <1 -- on, 0 -- off>
-- duration -- the time in miliseconds to turn on. 
+- duration -- the time in miliseconds to turn on.
 - target -- device to be targeted (see example for more information)
 
 `void setColor(uint16_t hue, float saturation, float brightness, uint16_t kelvin, uint32_t duration, uint8_t target[8])`
@@ -46,7 +47,7 @@ int main(){
                                                                         // A target with all zeros will change all ligths
   clifx lightController;  // decalre a clifx object
   lightController.setLightPower(1, 0, target);  // turn the power on with no delay
-  lightController.setColor(120, 1, .5, 0, 0, target); //sets the color to bright green (120deg) with a sautration of 100%, a brightness of 50%, 
+  lightController.setColor(120, 1, .5, 0, 0, target); //sets the color to bright green (120deg) with a sautration of 100%, a brightness of 50%,
                                                       //kelvin value of 0 (since we are using a saturation of >0% kelvin can be set to anything),
                                                       //and a duration of 0.
   lightController.~clifx(); //deconstructor, closes our udp socket created by the constructor.
