@@ -6,6 +6,7 @@ EXE_FILE	= clifx
 
 ${EXE_FILE}: ${OBJ_FILE}
 	${CC} ${FLAGS} -o ${EXE_FILE} ${OBJ_FILE}
+	mv ${EXE_FILE} /usr/bin
 
 cliApp.o: cliApp.cpp
 	${CC} ${CFLAGS} -c cliApp.cpp

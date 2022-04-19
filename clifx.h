@@ -22,6 +22,7 @@ public:
     ~clifx();
     void setLightPower(bool, uint32_t, uint8_t[8]);
     void setColor(uint16_t, float, float, uint16_t, uint32_t, uint8_t[8]);
+    void setWaveform(bool, uint16_t, float, float, uint16_t, uint32_t, float, float, uint8_t, uint8_t[8]);
 };
 
 #endif /* CLIFX_H */

@@ -82,6 +82,26 @@ void clifx::setColor(uint16_t hue, float saturation, float brightness, uint16_t 
     }
 }
 //setWaveform -- packet 103
+void clifx::setWaveform(bool trans, uint16_t hue, float sat, float bri, uint16_t kel, uint32_t per, float cyc, float skew, uint8_t wf, uint8_t tgt[8]){
+    struct wfmsg_t msg;
+    encodeHeader(&msg.header, 57, 0, 1, 3, tgt, 0, 1, 1, 103);
+    msg.payload.reserved = 0;
+    msg.payload.transient = 0xFF * trans;
+    msg.payload.hue = 0xFFFF * ((float) hue / 360.);
+    msg.payload.saturation = 0xFFFF * sat;
+    msg.payload.brightness = 0xFFFF * bri;
+    msg.payload.kelvin = kel;
+    msg.payload.period = per;
+    msg.payload.cycles = cyc;
+    msg.payload.skew_ratio = (int16_t)((65535 * skew) - 32768);
+    msg.payload.waveform = wf;
+    int len = sendto(sockfd, &msg, sizeof(msg), 0, (const struct sockaddr *)&servaddr, sizeof(servaddr));
+    if (len < 0){
+        perror("Error in sending waveform message");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
+}
 //setWaveformOptional -- packet119
 //setInfared -- packet 122
 //setHevCycle -- packet 143
