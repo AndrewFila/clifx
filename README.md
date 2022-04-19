@@ -29,10 +29,22 @@ arch linux, support for other operating systems is a plan for the future.
 `void setColor(uint16_t hue, float saturation, float brightness, uint16_t kelvin, uint32_t duration, uint8_t target[8])`
 - hue -- the color to set the light in HSBK <int 0 - 360>
 - saturation -- the saturation of the color <float 0.0 - 1.0>
-- brightness -- the brightness of the divice <float 0.0 - 1.0>
+- brightness -- the brightness of the device <float 0.0 - 1.0>
 - kelvin -- the kevlin level of the light (if saturation is greater than 0 the value of this does not matter) <int 1500 - 9000>
 - duration -- the time in miliseconds to change colors.
 - target -- device to be targeted (see example for more information)
+
+`void setWaveform(bool transient, uint16_t hue, float saturation, float brightness, uint16_t kelvin, uint32_t period, float cycles, float skew_ratio, uint8_t waveform, uint8_t target[8])`
+- transient
+- hue -- the color to transition to from the current color in HSBK <int 0 - 360>
+- saturation -- the saturation of the color. <float 0.0 - 1.0>
+- brightness -- the brightness of the device. <float 0.0 - 1.0>
+- kelvin -- the kevlin level of the light. (if saturation is greater than 0 the value of this does not matter) <int 1500 - 9000>
+- period -- the period of a wave in miliseconds.
+- cycles -- the number of cycles before the effect is over.
+- skew_ratio -- defines the duty cycle in pulse waves. (no effect on any other waveforms) <float 0.0 - 1.0>
+- waveform -- defines the waveform to use based on the waveform enum. <SAW = 0, SINE = 1, HALF_SINE = 2, TRIANGLE = 3, PULSE = 4>
+- target -- device to be targeted. (see example for more information)
 
 **Examples**
 
