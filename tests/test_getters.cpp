@@ -6,11 +6,13 @@
 
 using namespace CLifx::Get;
 
-TEST(GetServicePayloadTest, MessageType) { EXPECT_EQ(ServicePayload::MessageType, 3); }
+TEST(GetServicePayloadTest, MessageType) {
+    EXPECT_EQ(ServicePayload::MessageType, 3);
+}
 TEST(GetServicePayloadTest, RoundTrip) {
     ServicePayload original;
     original.service = 1;
-    original.port     = 56700;
+    original.port = 56700;
 
     auto restored = UnpackFromBuffer<ServicePayload>(PackToBuffer(original));
 
@@ -18,12 +20,14 @@ TEST(GetServicePayloadTest, RoundTrip) {
     EXPECT_EQ(restored.port, 56700U);
 }
 
-TEST(HostFirmwarePayloadTest, MessageType) { EXPECT_EQ(HostFirmwarePayload::MessageType, 15); }
+TEST(HostFirmwarePayloadTest, MessageType) {
+    EXPECT_EQ(HostFirmwarePayload::MessageType, 15);
+}
 TEST(HostFirmwarePayloadTest, RoundTrip) {
     HostFirmwarePayload original;
-    original.build          = 1111111111ULL;
-    original.version_minor  = 2;
-    original.version_major  = 3;
+    original.build = 1111111111ULL;
+    original.version_minor = 2;
+    original.version_major = 3;
 
     auto restored = UnpackFromBuffer<HostFirmwarePayload>(PackToBuffer(original));
 
@@ -32,7 +36,9 @@ TEST(HostFirmwarePayloadTest, RoundTrip) {
     EXPECT_EQ(restored.version_major, 3);
 }
 
-TEST(WifiInfoPayloadTest, MessageType) { EXPECT_EQ(WifiInfoPayload::MessageType, 17); }
+TEST(WifiInfoPayloadTest, MessageType) {
+    EXPECT_EQ(WifiInfoPayload::MessageType, 17);
+}
 TEST(WifiInfoPayloadTest, RoundTrip) {
     WifiInfoPayload original;
     original.signal = 12.5F;
@@ -42,10 +48,12 @@ TEST(WifiInfoPayloadTest, RoundTrip) {
     EXPECT_FLOAT_EQ(restored.signal, 12.5F);
 }
 
-TEST(WifiFirmwarePayloadTest, MessageType) { EXPECT_EQ(WifiFirmwarePayload::MessageType, 19); }
+TEST(WifiFirmwarePayloadTest, MessageType) {
+    EXPECT_EQ(WifiFirmwarePayload::MessageType, 19);
+}
 TEST(WifiFirmwarePayloadTest, RoundTrip) {
     WifiFirmwarePayload original;
-    original.build         = 222222ULL;
+    original.build = 222222ULL;
     original.version_minor = 4;
     original.version_major = 5;
 
@@ -56,7 +64,9 @@ TEST(WifiFirmwarePayloadTest, RoundTrip) {
     EXPECT_EQ(restored.version_major, 5);
 }
 
-TEST(GetPowerPayloadTest, MessageType) { EXPECT_EQ(PowerPayload::MessageType, 22); }
+TEST(GetPowerPayloadTest, MessageType) {
+    EXPECT_EQ(PowerPayload::MessageType, 22);
+}
 TEST(GetPowerPayloadTest, RoundTrip) {
     PowerPayload original;
     original.level = 65535;
@@ -66,7 +76,9 @@ TEST(GetPowerPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.level, 65535);
 }
 
-TEST(GetLabelPayloadTest, MessageType) { EXPECT_EQ(LabelPayload::MessageType, 25); }
+TEST(GetLabelPayloadTest, MessageType) {
+    EXPECT_EQ(LabelPayload::MessageType, 25);
+}
 TEST(GetLabelPayloadTest, RoundTrip) {
     LabelPayload original;
     original.label.fill(0);
@@ -78,10 +90,12 @@ TEST(GetLabelPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.label, original.label);
 }
 
-TEST(VersionPayloadTest, MessageType) { EXPECT_EQ(VersionPayload::MessageType, 33); }
+TEST(VersionPayloadTest, MessageType) {
+    EXPECT_EQ(VersionPayload::MessageType, 33);
+}
 TEST(VersionPayloadTest, RoundTrip) {
     VersionPayload original;
-    original.vendor  = 1;
+    original.vendor = 1;
     original.product = 55;
 
     auto restored = UnpackFromBuffer<VersionPayload>(PackToBuffer(original));
@@ -90,11 +104,13 @@ TEST(VersionPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.product, 55U);
 }
 
-TEST(InfoPayloadTest, MessageType) { EXPECT_EQ(InfoPayload::MessageType, 35); }
+TEST(InfoPayloadTest, MessageType) {
+    EXPECT_EQ(InfoPayload::MessageType, 35);
+}
 TEST(InfoPayloadTest, RoundTrip) {
     InfoPayload original;
-    original.time     = 1000;
-    original.uptime   = 2000;
+    original.time = 1000;
+    original.uptime = 2000;
     original.downtime = 3000;
 
     auto restored = UnpackFromBuffer<InfoPayload>(PackToBuffer(original));
@@ -104,7 +120,9 @@ TEST(InfoPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.downtime, 3000ULL);
 }
 
-TEST(GetLocationPayloadTest, MessageType) { EXPECT_EQ(LocationPayload::MessageType, 50); }
+TEST(GetLocationPayloadTest, MessageType) {
+    EXPECT_EQ(LocationPayload::MessageType, 50);
+}
 TEST(GetLocationPayloadTest, RoundTrip) {
     LocationPayload original;
     original.location.fill(0xAB);
@@ -120,7 +138,9 @@ TEST(GetLocationPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.updated_at, 123456789ULL);
 }
 
-TEST(GetGroupPayloadTest, MessageType) { EXPECT_EQ(GroupPayload::MessageType, 53); }
+TEST(GetGroupPayloadTest, MessageType) {
+    EXPECT_EQ(GroupPayload::MessageType, 53);
+}
 TEST(GetGroupPayloadTest, RoundTrip) {
     GroupPayload original;
     original.group.fill(0xCD);
@@ -136,7 +156,9 @@ TEST(GetGroupPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.updated_at, 987654321ULL);
 }
 
-TEST(EchoRequestPayloadTest, MessageType) { EXPECT_EQ(EchoRequestPayload::MessageType, 58); }
+TEST(EchoRequestPayloadTest, MessageType) {
+    EXPECT_EQ(EchoRequestPayload::MessageType, 58);
+}
 TEST(EchoRequestPayloadTest, RoundTrip) {
     EchoRequestPayload original;
     for (std::size_t i = 0; i < original.payload.size(); ++i) {
@@ -148,7 +170,9 @@ TEST(EchoRequestPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.payload, original.payload);
 }
 
-TEST(EchoResponsePayloadTest, MessageType) { EXPECT_EQ(EchoResponsePayload::MessageType, 59); }
+TEST(EchoResponsePayloadTest, MessageType) {
+    EXPECT_EQ(EchoResponsePayload::MessageType, 59);
+}
 TEST(EchoResponsePayloadTest, RoundTrip) {
     EchoResponsePayload original;
     for (std::size_t i = 0; i < original.payload.size(); ++i) {
@@ -160,11 +184,13 @@ TEST(EchoResponsePayloadTest, RoundTrip) {
     EXPECT_EQ(restored.payload, original.payload);
 }
 
-TEST(GetButtonConfigPayloadTest, MessageType) { EXPECT_EQ(ButtonConfigPayload::MessageType, 911); }
+TEST(GetButtonConfigPayloadTest, MessageType) {
+    EXPECT_EQ(ButtonConfigPayload::MessageType, 911);
+}
 TEST(GetButtonConfigPayloadTest, RoundTrip) {
     ButtonConfigPayload original;
-    original.haptic_duration_ms      = 250;
-    original.backlight_on_color.hue  = 100;
+    original.haptic_duration_ms = 250;
+    original.backlight_on_color.hue = 100;
     original.backlight_on_color.kelvin = 3500;
     original.backlight_off_color.hue = 200;
     original.backlight_off_color.kelvin = 2700;
@@ -178,14 +204,16 @@ TEST(GetButtonConfigPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.backlight_off_color.kelvin, 2700);
 }
 
-TEST(GetColorPayloadTest, MessageType) { EXPECT_EQ(ColorPayload::MessageType, 107); }
+TEST(GetColorPayloadTest, MessageType) {
+    EXPECT_EQ(ColorPayload::MessageType, 107);
+}
 TEST(GetColorPayloadTest, RoundTrip) {
     ColorPayload original;
-    original.color.hue        = 1000;
+    original.color.hue = 1000;
     original.color.saturation = 2000;
     original.color.brightness = 3000;
-    original.color.kelvin     = 4000;
-    original.power            = 65535;
+    original.color.kelvin = 4000;
+    original.power = 65535;
     original.label.fill(0);
     const char *name = "Bedroom";
     std::copy(name, name + std::strlen(name), original.label.begin());
@@ -200,7 +228,9 @@ TEST(GetColorPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.label, original.label);
 }
 
-TEST(GetLightPowerPayloadTest, MessageType) { EXPECT_EQ(LightPowerPayload::MessageType, 118); }
+TEST(GetLightPowerPayloadTest, MessageType) {
+    EXPECT_EQ(LightPowerPayload::MessageType, 118);
+}
 TEST(GetLightPowerPayloadTest, RoundTrip) {
     LightPowerPayload original;
     original.level = 32768;
@@ -210,7 +240,9 @@ TEST(GetLightPowerPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.level, 32768);
 }
 
-TEST(GetInfraredPayloadTest, MessageType) { EXPECT_EQ(InfraredPayload::MessageType, 121); }
+TEST(GetInfraredPayloadTest, MessageType) {
+    EXPECT_EQ(InfraredPayload::MessageType, 121);
+}
 TEST(GetInfraredPayloadTest, RoundTrip) {
     InfraredPayload original;
     original.brightness = 12345;
@@ -220,12 +252,14 @@ TEST(GetInfraredPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.brightness, 12345);
 }
 
-TEST(HevCyclePayloadTest, MessageType) { EXPECT_EQ(HevCyclePayload::MessageType, 144); }
+TEST(HevCyclePayloadTest, MessageType) {
+    EXPECT_EQ(HevCyclePayload::MessageType, 144);
+}
 TEST(HevCyclePayloadTest, RoundTrip) {
     HevCyclePayload original;
-    original.duration_s  = 100;
+    original.duration_s = 100;
     original.remaining_s = 50;
-    original.last_power  = true;
+    original.last_power = true;
 
     auto restored = UnpackFromBuffer<HevCyclePayload>(PackToBuffer(original));
 
@@ -248,7 +282,9 @@ TEST(HevCycleConfigurationPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.duration_s, 7200U);
 }
 
-TEST(LastHevCycleResultPayloadTest, MessageType) { EXPECT_EQ(LastHevCycleResultPayload::MessageType, 149); }
+TEST(LastHevCycleResultPayloadTest, MessageType) {
+    EXPECT_EQ(LastHevCycleResultPayload::MessageType, 149);
+}
 TEST(LastHevCycleResultPayloadTest, RoundTrip) {
     LastHevCycleResultPayload original;
     original.result = 2;
@@ -258,11 +294,13 @@ TEST(LastHevCycleResultPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.result, 2);
 }
 
-TEST(GetColorZonesQueryPayloadTest, MessageType) { EXPECT_EQ(GetColorZonesPayload::MessageType, 502); }
+TEST(GetColorZonesQueryPayloadTest, MessageType) {
+    EXPECT_EQ(GetColorZonesPayload::MessageType, 502);
+}
 TEST(GetColorZonesQueryPayloadTest, RoundTrip) {
     GetColorZonesPayload original;
     original.start_index = 2;
-    original.end_index   = 6;
+    original.end_index = 6;
 
     auto restored = UnpackFromBuffer<GetColorZonesPayload>(PackToBuffer(original));
 
@@ -270,15 +308,17 @@ TEST(GetColorZonesQueryPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.end_index, 6);
 }
 
-TEST(StateZonePayloadTest, MessageType) { EXPECT_EQ(StateZonePayload::MessageType, 503); }
+TEST(StateZonePayloadTest, MessageType) {
+    EXPECT_EQ(StateZonePayload::MessageType, 503);
+}
 TEST(StateZonePayloadTest, RoundTrip) {
     StateZonePayload original;
-    original.zones_count  = 16;
-    original.zone_index   = 4;
-    original.color.hue        = 1234;
+    original.zones_count = 16;
+    original.zone_index = 4;
+    original.color.hue = 1234;
     original.color.saturation = 2345;
     original.color.brightness = 3456;
-    original.color.kelvin     = 4567;
+    original.color.kelvin = 4567;
 
     auto restored = UnpackFromBuffer<StateZonePayload>(PackToBuffer(original));
 
@@ -290,16 +330,18 @@ TEST(StateZonePayloadTest, RoundTrip) {
     EXPECT_EQ(restored.color.kelvin, 4567);
 }
 
-TEST(GetColorZonesPayloadTest, MessageType) { EXPECT_EQ(ColorZonesPayload::MessageType, 506); }
+TEST(GetColorZonesPayloadTest, MessageType) {
+    EXPECT_EQ(ColorZonesPayload::MessageType, 506);
+}
 TEST(GetColorZonesPayloadTest, RoundTrip) {
     ColorZonesPayload original;
     original.count = 8;
     original.index = 0;
     for (std::size_t i = 0; i < original.colors.size(); ++i) {
-        original.colors[i].hue        = static_cast<std::uint16_t>(i * 100);
+        original.colors[i].hue = static_cast<std::uint16_t>(i * 100);
         original.colors[i].saturation = static_cast<std::uint16_t>(i * 10);
         original.colors[i].brightness = static_cast<std::uint16_t>(i * 20);
-        original.colors[i].kelvin     = 3500;
+        original.colors[i].kelvin = 3500;
     }
 
     auto restored = UnpackFromBuffer<ColorZonesPayload>(PackToBuffer(original));
@@ -314,13 +356,15 @@ TEST(GetColorZonesPayloadTest, RoundTrip) {
     }
 }
 
-TEST(MultiZoneEffectPayloadTest, MessageType) { EXPECT_EQ(MultiZoneEffectPayload::MessageType, 509); }
+TEST(MultiZoneEffectPayloadTest, MessageType) {
+    EXPECT_EQ(MultiZoneEffectPayload::MessageType, 509);
+}
 TEST(MultiZoneEffectPayloadTest, RoundTrip) {
     MultiZoneEffectPayload original;
     original.instanceid = 42;
-    original.type        = 1;
-    original.speed        = 500;
-    original.duration     = 60000;
+    original.type = 1;
+    original.speed = 500;
+    original.duration = 60000;
     for (std::size_t i = 0; i < original.parameters.size(); ++i) {
         original.parameters[i] = static_cast<std::uint32_t>(i);
     }
@@ -334,14 +378,16 @@ TEST(MultiZoneEffectPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.parameters, original.parameters);
 }
 
-TEST(GetExtendedColorZonesPayloadTest, MessageType) { EXPECT_EQ(ExtendedColorZonesPayload::MessageType, 512); }
+TEST(GetExtendedColorZonesPayloadTest, MessageType) {
+    EXPECT_EQ(ExtendedColorZonesPayload::MessageType, 512);
+}
 TEST(GetExtendedColorZonesPayloadTest, RoundTrip) {
     ExtendedColorZonesPayload original;
-    original.zones_count  = 82;
-    original.zone_index   = 0;
+    original.zones_count = 82;
+    original.zone_index = 0;
     original.colors_count = 82;
     for (std::size_t i = 0; i < original.colors.size(); ++i) {
-        original.colors[i].hue    = static_cast<std::uint16_t>(i);
+        original.colors[i].hue = static_cast<std::uint16_t>(i);
         original.colors[i].kelvin = 3500;
     }
 
@@ -356,11 +402,13 @@ TEST(GetExtendedColorZonesPayloadTest, RoundTrip) {
     }
 }
 
-TEST(GetRPowerPayloadTest, MessageType) { EXPECT_EQ(RPowerPayload::MessageType, 818); }
+TEST(GetRPowerPayloadTest, MessageType) {
+    EXPECT_EQ(RPowerPayload::MessageType, 818);
+}
 TEST(GetRPowerPayloadTest, RoundTrip) {
     RPowerPayload original;
     original.relay_index = 2;
-    original.level        = 65535;
+    original.level = 65535;
 
     auto restored = UnpackFromBuffer<RPowerPayload>(PackToBuffer(original));
 
@@ -368,17 +416,19 @@ TEST(GetRPowerPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.level, 65535);
 }
 
-TEST(DeviceChainPayloadTest, MessageType) { EXPECT_EQ(DeviceChainPayload::MessageType, 702); }
+TEST(DeviceChainPayloadTest, MessageType) {
+    EXPECT_EQ(DeviceChainPayload::MessageType, 702);
+}
 TEST(DeviceChainPayloadTest, RoundTrip) {
     DeviceChainPayload original;
-    original.start_index         = 0;
-    original.tile_devices_count  = 2;
-    original.tile_devices[0].width           = 8;
-    original.tile_devices[0].height          = 8;
-    original.tile_devices[0].firmware_build  = 111ULL;
-    original.tile_devices[1].width           = 8;
-    original.tile_devices[1].height          = 8;
-    original.tile_devices[1].firmware_build  = 222ULL;
+    original.start_index = 0;
+    original.tile_devices_count = 2;
+    original.tile_devices[0].width = 8;
+    original.tile_devices[0].height = 8;
+    original.tile_devices[0].firmware_build = 111ULL;
+    original.tile_devices[1].width = 8;
+    original.tile_devices[1].height = 8;
+    original.tile_devices[1].firmware_build = 222ULL;
 
     auto restored = UnpackFromBuffer<DeviceChainPayload>(PackToBuffer(original));
 
@@ -389,14 +439,16 @@ TEST(DeviceChainPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.tile_devices[1].firmware_build, 222ULL);
 }
 
-TEST(Get64PayloadTest, MessageType) { EXPECT_EQ(Get64Payload::MessageType, 707); }
+TEST(Get64PayloadTest, MessageType) {
+    EXPECT_EQ(Get64Payload::MessageType, 707);
+}
 TEST(Get64PayloadTest, RoundTrip) {
     Get64Payload original;
     original.tile_index = 1;
-    original.length      = 1;
-    original.x            = 0;
-    original.y            = 0;
-    original.width        = 8;
+    original.length = 1;
+    original.x = 0;
+    original.y = 0;
+    original.width = 8;
 
     auto restored = UnpackFromBuffer<Get64Payload>(PackToBuffer(original));
 
@@ -407,15 +459,17 @@ TEST(Get64PayloadTest, RoundTrip) {
     EXPECT_EQ(restored.width, 8);
 }
 
-TEST(State64PayloadTest, MessageType) { EXPECT_EQ(State64Payload::MessageType, 711); }
+TEST(State64PayloadTest, MessageType) {
+    EXPECT_EQ(State64Payload::MessageType, 711);
+}
 TEST(State64PayloadTest, RoundTrip) {
     State64Payload original;
     original.tile_index = 1;
-    original.x            = 0;
-    original.y            = 0;
-    original.width        = 8;
+    original.x = 0;
+    original.y = 0;
+    original.width = 8;
     for (std::size_t i = 0; i < original.colors.size(); ++i) {
-        original.colors[i].hue    = static_cast<std::uint16_t>(i * 5);
+        original.colors[i].hue = static_cast<std::uint16_t>(i * 5);
         original.colors[i].kelvin = 3500;
     }
 
@@ -431,16 +485,18 @@ TEST(State64PayloadTest, RoundTrip) {
     }
 }
 
-TEST(GetTileEffectPayloadTest, MessageType) { EXPECT_EQ(TileEffectPayload::MessageType, 720); }
+TEST(GetTileEffectPayloadTest, MessageType) {
+    EXPECT_EQ(TileEffectPayload::MessageType, 720);
+}
 TEST(GetTileEffectPayloadTest, RoundTrip) {
     TileEffectPayload original;
-    original.instanceid     = 5;
-    original.type            = 2;
-    original.speed           = 3000;
-    original.duration        = 0;
-    original.palette_count   = 2;
-    original.palette[0].hue  = 100;
-    original.palette[1].hue  = 200;
+    original.instanceid = 5;
+    original.type = 2;
+    original.speed = 3000;
+    original.duration = 0;
+    original.palette_count = 2;
+    original.palette[0].hue = 100;
+    original.palette[1].hue = 200;
 
     auto restored = UnpackFromBuffer<TileEffectPayload>(PackToBuffer(original));
 
@@ -453,7 +509,9 @@ TEST(GetTileEffectPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.palette[1].hue, 200);
 }
 
-TEST(SensorAmbientLightPayloadTest, MessageType) { EXPECT_EQ(SensorAmbientLightPayload::MessageType, 402); }
+TEST(SensorAmbientLightPayloadTest, MessageType) {
+    EXPECT_EQ(SensorAmbientLightPayload::MessageType, 402);
+}
 TEST(SensorAmbientLightPayloadTest, RoundTrip) {
     SensorAmbientLightPayload original;
     original.lux = 350.25F;

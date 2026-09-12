@@ -37,8 +37,8 @@ class LocationPayload : public BasePayload {
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
     std::array<std::uint8_t, UUID_LENGTH> location;
-    std::array<char, LABEL_LENGTH>        label;
-    std::uint64_t                         updated_at;
+    std::array<char, LABEL_LENGTH> label;
+    std::uint64_t updated_at;
 };
 
 class GroupPayload : public BasePayload {
@@ -48,8 +48,8 @@ class GroupPayload : public BasePayload {
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
     std::array<std::uint8_t, UUID_LENGTH> group;
-    std::array<char, LABEL_LENGTH>        label;
-    std::uint64_t                         updated_at;
+    std::array<char, LABEL_LENGTH> label;
+    std::uint64_t updated_at;
 };
 
 // Light
@@ -59,8 +59,9 @@ class ColorPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 102; // SetColor
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    HSBK          color;
+    HSBK color;
     std::uint32_t duration;
+
   private:
     std::uint8_t reserved;
 };
@@ -71,12 +72,13 @@ class WaveformPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 103; // SetWaveform
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    bool          transient;
-    HSBK          color;
+    bool transient;
+    HSBK color;
     std::uint32_t period;
-    float         cycles;
-    std::int16_t  skew_ratio;
-    std::uint8_t  waveform;
+    float cycles;
+    std::int16_t skew_ratio;
+    std::uint8_t waveform;
+
   private:
     std::uint8_t reserved;
 };
@@ -97,16 +99,17 @@ class WaveformOptionalPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 119; // SetWaveformOptional
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    bool          transient;
-    HSBK          color;
+    bool transient;
+    HSBK color;
     std::uint32_t period;
-    float         cycles;
-    std::int16_t  skew_ratio;
-    std::uint8_t  waveform;
-    bool          set_hue;
-    bool          set_saturation;
-    bool          set_brightness;
-    bool          set_kelvin;
+    float cycles;
+    std::int16_t skew_ratio;
+    std::uint8_t waveform;
+    bool set_hue;
+    bool set_saturation;
+    bool set_brightness;
+    bool set_kelvin;
+
   private:
     std::uint8_t reserved;
 };
@@ -126,7 +129,7 @@ class HevCyclePayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 143; // SetHevCycle
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    bool          enable;
+    bool enable;
     std::uint32_t duration_s;
 };
 
@@ -136,7 +139,7 @@ class HevCycleConfigurationPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 146; // SetHevCycleConfiguration
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    bool          indication;
+    bool indication;
     std::uint32_t duration_s;
 };
 
@@ -147,11 +150,11 @@ class ColorZonesPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 501; // SetColorZones
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    std::uint8_t  start_index;
-    std::uint8_t  end_index;
-    HSBK          color;
+    std::uint8_t start_index;
+    std::uint8_t end_index;
+    HSBK color;
     std::uint32_t duration;
-    std::uint8_t  apply;
+    std::uint8_t apply;
 };
 
 class MulitiZoneEffectPayload : public BasePayload {
@@ -160,11 +163,12 @@ class MulitiZoneEffectPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 508; // SetMultiZoneEffect
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    std::uint32_t                                    instanceid;
-    std::uint8_t                                     type;
-    std::uint32_t                                    speed;
-    std::uint64_t                                    duration;
+    std::uint32_t instanceid;
+    std::uint8_t type;
+    std::uint32_t speed;
+    std::uint64_t duration;
     std::array<std::uint32_t, MULTIZONE_PARAM_COUNT> parameters;
+
   private:
     std::uint16_t reserved1;
     std::uint32_t reserved2;
@@ -177,10 +181,10 @@ class ExtendedColorZonesPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 510; // SetExtendedColorZones
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    std::uint32_t                          duration;
-    std::uint8_t                           apply;
-    std::uint16_t                          zone_index;
-    std::uint8_t                           colors_count;
+    std::uint32_t duration;
+    std::uint8_t apply;
+    std::uint16_t zone_index;
+    std::uint8_t colors_count;
     std::array<HSBK, EXTENDED_COLOR_COUNT> colors;
 };
 
@@ -191,7 +195,7 @@ class RPowerPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 817; // SetRPower
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    std::uint8_t  relay_index;
+    std::uint8_t relay_index;
     std::uint16_t level;
 };
 
@@ -203,8 +207,8 @@ class ButtonConfigPayload : public BasePayload {
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
     std::uint16_t haptic_duration_ms;
-    HSBK          backlight_on_color;
-    HSBK          backlight_off_color;
+    HSBK backlight_on_color;
+    HSBK backlight_off_color;
 };
 
 // Tile
@@ -215,8 +219,9 @@ class UserPositionPayload : public BasePayload {
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
     std::uint8_t tile_index;
-    float        user_x;
-    float        user_y;
+    float user_x;
+    float user_y;
+
   private:
     std::uint16_t reserved;
 };
@@ -227,13 +232,14 @@ class Set64Payload : public BasePayload {
     static constexpr std::uint16_t MessageType = 715; // Set64
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    std::uint8_t                        tile_index;
-    std::uint8_t                        length;
-    std::uint8_t                        x;
-    std::uint8_t                        y;
-    std::uint8_t                        width;
-    std::uint32_t                       duration;
-    std::array<HSBK, TILE_COLOR_COUNT>  colors;
+    std::uint8_t tile_index;
+    std::uint8_t length;
+    std::uint8_t x;
+    std::uint8_t y;
+    std::uint8_t width;
+    std::uint32_t duration;
+    std::array<HSBK, TILE_COLOR_COUNT> colors;
+
   private:
     std::uint8_t reserved;
 };
@@ -244,17 +250,18 @@ class CopyFrameBufferPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 716; // CopyFrameBuffer
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    std::uint8_t  tile_index;
-    std::uint8_t  length;
-    std::uint8_t  src_fb_index;
-    std::uint8_t  dst_fb_index;
-    std::uint8_t  src_x;
-    std::uint8_t  src_y;
-    std::uint8_t  dst_x;
-    std::uint8_t  dst_y;
-    std::uint8_t  width;
-    std::uint8_t  height;
+    std::uint8_t tile_index;
+    std::uint8_t length;
+    std::uint8_t src_fb_index;
+    std::uint8_t dst_fb_index;
+    std::uint8_t src_x;
+    std::uint8_t src_y;
+    std::uint8_t dst_x;
+    std::uint8_t dst_y;
+    std::uint8_t width;
+    std::uint8_t height;
     std::uint32_t duration;
+
   private:
     std::uint8_t reserved;
 };
@@ -265,15 +272,16 @@ class TileEffectPayload : public BasePayload {
     static constexpr std::uint16_t MessageType = 719; // SetTileEffect
     void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
     void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
-    std::uint32_t                        instanceid;
-    std::uint8_t                         type;
-    std::uint32_t                        speed;
-    std::uint64_t                        duration;
-    std::uint8_t                         palette_count;
+    std::uint32_t instanceid;
+    std::uint8_t type;
+    std::uint32_t speed;
+    std::uint64_t duration;
+    std::uint8_t palette_count;
     std::array<HSBK, TILE_PALETTE_COUNT> palette;
+
   private:
-    std::uint8_t  reserved1;
-    std::uint8_t  reserved2;
+    std::uint8_t reserved1;
+    std::uint8_t reserved2;
     std::uint32_t reserved3;
     std::uint32_t reserved4;
 };
