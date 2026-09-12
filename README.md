@@ -1,5 +1,21 @@
 # clifx
 
+[![Tests](https://github.com/AndrewFila/clifx/actions/workflows/tests.yml/badge.svg)](https://github.com/AndrewFila/clifx/actions/workflows/tests.yml)
+
+**Testing**
+
+Every `Pack`/`Unpack` implementation is covered by a GoogleTest round-trip test (pack a value, unpack it back, assert the fields survived), plus targeted tests for the trickier bits — `FrameHeader`'s bit-packed protocol/addressable/tagged/origin word, `FrameAddress`'s reserved-byte zeroing, and `Packet`'s size-field patching. As of the last update: **102 tests, 100% passing** across the `Utils::Packable` helpers, every `packets/base.hpp` type, and every `CLifx::Get::*` / `CLifx::Set::*` payload. The badge above reflects the live status of the `main` branch.
+
+Tests run automatically on every push/PR via GitHub Actions (`.github/workflows/tests.yml`). To run them locally:
+
+```sh
+cmake -B build
+cmake --build build
+cd build && ctest --output-on-failure
+```
+
+GoogleTest is fetched automatically via CMake `FetchContent` — no manual setup needed. If clifx is pulled in as a dependency of another project (via `add_subdirectory`), tests are skipped by default; set `CLIFX_BUILD_TESTS=ON` to force them.
+
 **Description**
 
 clifx is a C++20 implementation of the [LIFX LAN protocol](https://lan.developer.lifx.com/docs) message layer — it packs and unpacks LIFX packets to and from raw byte buffers.
@@ -22,7 +38,7 @@ cmake -B build
 cmake --build build
 ```
 
-This produces `libclifx.a`. `CMakeLists.txt` exposes the repo root as a public include directory, so a consuming project can point at this repo (as a subdirectory, submodule, or installed package) and include headers as shown below.
+This produces `libpackets.a` (the actual sources) behind an `INTERFACE` target named `clifx`. `CMakeLists.txt` exposes the repo root as a public include directory, so a consuming project can point at this repo (as a subdirectory, submodule, or installed package), `target_link_libraries(your_target PRIVATE clifx)`, and include headers as shown below.
 
 **Usage**
 

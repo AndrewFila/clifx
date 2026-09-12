@@ -1,5 +1,20 @@
 # ninja log v6
-1	438	1789236279851955810	packets/CMakeFiles/packets.dir/base.cpp.o	d989179691a5ddd2
-1	445	1789236279851955810	packets/CMakeFiles/packets.dir/setters.cpp.o	924a1ada1460187b
-1	456	1789236279851955810	packets/CMakeFiles/packets.dir/getters.cpp.o	97d8519ab56cf93b
-456	583	1789236280307955767	packets/libpackets.a	37894f254e31ec35
+2	666	1789239717407626221	packets/CMakeFiles/packets.dir/base.cpp.o	d989179691a5ddd2
+2	694	1789239717407626221	packets/CMakeFiles/packets.dir/getters.cpp.o	97d8519ab56cf93b
+2	694	1789239717407626221	packets/CMakeFiles/packets.dir/setters.cpp.o	924a1ada1460187b
+694	848	1789239718099626152	packets/libpackets.a	37894f254e31ec35
+3	1175	1789239717407626221	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o	37dbbd503eb81808
+3	1311	1789239717407626221	tests/CMakeFiles/clifx_tests.dir/test_packable.cpp.o	63971eb8cda8550c
+3	1382	1789239717407626221	tests/CMakeFiles/clifx_tests.dir/test_base.cpp.o	8d806bbf6059caf9
+5	1493	1789239717411626219	_deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o	979c57fc333d6c86
+3	1676	1789239717407626221	tests/CMakeFiles/clifx_tests.dir/test_getters.cpp.o	28d3bd54fa2ff4a1
+4	1692	1789239717411626219	tests/CMakeFiles/clifx_tests.dir/test_setters.cpp.o	aaa1a8b065c90428
+3	2073	1789239717407626221	_deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o	e146a212d74e645d
+2	3674	1789239717407626221	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o	2f95bee9e1d33e79
+3674	3758	1789239721079625857	lib/libgtest.a	e21429778cf18d0f
+3758	3796	1789239721163625848	lib/libgtest_main.a	30ececf4ed42069a
+3758	3810	1789239721163625848	lib/libgmock.a	aed9b9110c6e7301
+3810	3849	1789239721215625843	lib/libgmock_main.a	685aef476c43eaae
+3796	4002	1789239721407625824	tests/clifx_tests	f34007af2f7defe6
+3796	4002	1789239721407625824	tests/clifx_tests[1]_tests.cmake	f34007af2f7defe6
+3796	4002	1789239721407625824	/home/andrew/projects/clifx/build/tests/clifx_tests[1]_tests.cmake	f34007af2f7defe6
