@@ -1,0 +1,14 @@
+# ninja log v6
+668	763	1774569612408032032	clifx	6e273626fc795a02
+2	663	1774569611740031966	CMakeFiles/clifx_test.dir/app/test.cpp.o	fd589cdfd9bc412f
+1	479	1774568934803964867	CMakeFiles/clifx.dir/app/cliApp.cpp.o	26df83865851fc07
+1	480	1774568934803964867	CMakeFiles/clifx.dir/app/clifx.cpp.o	9eea7bec87b94c15
+3	636	1774568934803964867	CMakeFiles/clifx_test.dir/packets/base.cpp.o	df9e6e6d59e6d882
+2	666	1774569611740031966	CMakeFiles/clifx.dir/packets/setters.cpp.o	8c4a714aacf9c296
+2	668	1774569611740031966	CMakeFiles/clifx.dir/packets/getters.cpp.o	3dc4f67f5688e642
+2	642	1774568934803964867	CMakeFiles/clifx.dir/packets/base.cpp.o	c5125aa88c237340
+665	762	1774569612404032031	clifx_test	4434d831029e5b69
+3	664	1774569611740031966	CMakeFiles/clifx_test.dir/packets/setters.cpp.o	1c234908dbf8e208
+3	665	1774569611740031966	CMakeFiles/clifx_test.dir/packets/getters.cpp.o	21945303afd069b0
+2	602	1774570059292076413	CMakeFiles/clifx_test.dir/app/test.cpp.o	fd589cdfd9bc412f
+602	722	1774570059892076467	clifx_test	4434d831029e5b69
