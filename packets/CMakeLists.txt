@@ -9,3 +9,7 @@ target_include_directories(packets PUBLIC
 )
 
 target_link_libraries(packets PUBLIC utils)
+
+target_compile_options(packets PRIVATE
+    -Wall -Wextra -Wpedantic
+)

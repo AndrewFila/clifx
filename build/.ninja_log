@@ -1,5 +1,5 @@
 # ninja log v6
-1	456	1789234000136174913	CMakeFiles/clifx.dir/packets/base.cpp.o	9f03e16bac73d379
-1	468	1789234000136174913	CMakeFiles/clifx.dir/packets/setters.cpp.o	7fbc2878c7299d04
-1	475	1789234000136174913	CMakeFiles/clifx.dir/packets/getters.cpp.o	bf5baedf2406a35c
-475	618	1789234000612174870	libclifx.a	96a85573acaa2733
+1	438	1789236279851955810	packets/CMakeFiles/packets.dir/base.cpp.o	d989179691a5ddd2
+1	445	1789236279851955810	packets/CMakeFiles/packets.dir/setters.cpp.o	924a1ada1460187b
+1	456	1789236279851955810	packets/CMakeFiles/packets.dir/getters.cpp.o	97d8519ab56cf93b
+456	583	1789236280307955767	packets/libpackets.a	37894f254e31ec35

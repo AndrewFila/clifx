@@ -1,20 +1,20 @@
 [
 {
   "directory": "/home/andrew/projects/clifx/build",
-  "command": "/usr/bin/c++ -I/home/andrew/projects/clifx -std=gnu++20 -Wall -Wextra -Wpedantic -o CMakeFiles/clifx.dir/packets/base.cpp.o -c /home/andrew/projects/clifx/packets/base.cpp",
+  "command": "/usr/bin/c++ -I/home/andrew/projects/clifx/packets -I/home/andrew/projects/clifx/utils -std=gnu++20 -Wall -Wextra -Wpedantic -o packets/CMakeFiles/packets.dir/base.cpp.o -c /home/andrew/projects/clifx/packets/base.cpp",
   "file": "/home/andrew/projects/clifx/packets/base.cpp",
-  "output": "CMakeFiles/clifx.dir/packets/base.cpp.o"
+  "output": "packets/CMakeFiles/packets.dir/base.cpp.o"
 },
 {
   "directory": "/home/andrew/projects/clifx/build",
-  "command": "/usr/bin/c++ -I/home/andrew/projects/clifx -std=gnu++20 -Wall -Wextra -Wpedantic -o CMakeFiles/clifx.dir/packets/getters.cpp.o -c /home/andrew/projects/clifx/packets/getters.cpp",
+  "command": "/usr/bin/c++ -I/home/andrew/projects/clifx/packets -I/home/andrew/projects/clifx/utils -std=gnu++20 -Wall -Wextra -Wpedantic -o packets/CMakeFiles/packets.dir/getters.cpp.o -c /home/andrew/projects/clifx/packets/getters.cpp",
   "file": "/home/andrew/projects/clifx/packets/getters.cpp",
-  "output": "CMakeFiles/clifx.dir/packets/getters.cpp.o"
+  "output": "packets/CMakeFiles/packets.dir/getters.cpp.o"
 },
 {
   "directory": "/home/andrew/projects/clifx/build",
-  "command": "/usr/bin/c++ -I/home/andrew/projects/clifx -std=gnu++20 -Wall -Wextra -Wpedantic -o CMakeFiles/clifx.dir/packets/setters.cpp.o -c /home/andrew/projects/clifx/packets/setters.cpp",
+  "command": "/usr/bin/c++ -I/home/andrew/projects/clifx/packets -I/home/andrew/projects/clifx/utils -std=gnu++20 -Wall -Wextra -Wpedantic -o packets/CMakeFiles/packets.dir/setters.cpp.o -c /home/andrew/projects/clifx/packets/setters.cpp",
   "file": "/home/andrew/projects/clifx/packets/setters.cpp",
-  "output": "CMakeFiles/clifx.dir/packets/setters.cpp.o"
+  "output": "packets/CMakeFiles/packets.dir/setters.cpp.o"
 }
 ]
