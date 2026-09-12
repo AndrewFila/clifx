@@ -4,7 +4,8 @@ namespace CLifx::Get {
 
 // ── ServicePayload ────────────────────────────────────────────────────────────
 
-ServicePayload::ServicePayload() : service(0), port(0) {}
+ServicePayload::ServicePayload() : service(0), port(0) {
+}
 
 void ServicePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, service);
@@ -13,13 +14,14 @@ void ServicePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) con
 
 void ServicePayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     service = read<std::uint8_t>(buffer, offset);
-    port    = read<std::uint32_t>(buffer, offset);
+    port = read<std::uint32_t>(buffer, offset);
 }
 
 // ── HostFirmwarePayload ───────────────────────────────────────────────────────
 
 HostFirmwarePayload::HostFirmwarePayload()
-    : build(0), version_minor(0), version_major(0), reserved(0) {}
+    : build(0), version_minor(0), version_major(0), reserved(0) {
+}
 
 void HostFirmwarePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, build);
@@ -29,16 +31,16 @@ void HostFirmwarePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset
 }
 
 void HostFirmwarePayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    build         = read<std::uint64_t>(buffer, offset);
-    offset       += sizeof(std::uint64_t);                 // reserved
+    build = read<std::uint64_t>(buffer, offset);
+    offset += sizeof(std::uint64_t); // reserved
     version_minor = read<std::uint16_t>(buffer, offset);
     version_major = read<std::uint16_t>(buffer, offset);
 }
 
 // ── WifiInfoPayload ───────────────────────────────────────────────────────────
 
-WifiInfoPayload::WifiInfoPayload()
-    : signal(0.0F), reserved1(0), reserved2(0), reserved3(0) {}
+WifiInfoPayload::WifiInfoPayload() : signal(0.0F), reserved1(0), reserved2(0), reserved3(0) {
+}
 
 void WifiInfoPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, signal);
@@ -48,16 +50,17 @@ void WifiInfoPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) co
 }
 
 void WifiInfoPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    signal  = read<float>(buffer, offset);
-    offset += sizeof(std::uint32_t);                       // reserved1
-    offset += sizeof(std::uint32_t);                       // reserved2
-    offset += sizeof(std::int16_t);                        // reserved3
+    signal = read<float>(buffer, offset);
+    offset += sizeof(std::uint32_t); // reserved1
+    offset += sizeof(std::uint32_t); // reserved2
+    offset += sizeof(std::int16_t);  // reserved3
 }
 
 // ── WifiFirmwarePayload ───────────────────────────────────────────────────────
 
 WifiFirmwarePayload::WifiFirmwarePayload()
-    : build(0), version_minor(0), version_major(0), reserved(0) {}
+    : build(0), version_minor(0), version_major(0), reserved(0) {
+}
 
 void WifiFirmwarePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, build);
@@ -67,15 +70,16 @@ void WifiFirmwarePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset
 }
 
 void WifiFirmwarePayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    build         = read<std::uint64_t>(buffer, offset);
-    offset       += sizeof(std::uint64_t);                 // reserved
+    build = read<std::uint64_t>(buffer, offset);
+    offset += sizeof(std::uint64_t); // reserved
     version_minor = read<std::uint16_t>(buffer, offset);
     version_major = read<std::uint16_t>(buffer, offset);
 }
 
 // ── PowerPayload ──────────────────────────────────────────────────────────────
 
-PowerPayload::PowerPayload() : level(0) {}
+PowerPayload::PowerPayload() : level(0) {
+}
 
 void PowerPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, level);
@@ -87,7 +91,8 @@ void PowerPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offse
 
 // ── LabelPayload ──────────────────────────────────────────────────────────────
 
-LabelPayload::LabelPayload() : label{} {}
+LabelPayload::LabelPayload() : label{} {
+}
 
 void LabelPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, label);
@@ -99,7 +104,8 @@ void LabelPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offse
 
 // ── VersionPayload ────────────────────────────────────────────────────────────
 
-VersionPayload::VersionPayload() : vendor(0), product(0), reserved(0) {}
+VersionPayload::VersionPayload() : vendor(0), product(0), reserved(0) {
+}
 
 void VersionPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, vendor);
@@ -108,14 +114,15 @@ void VersionPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) con
 }
 
 void VersionPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    vendor  = read<std::uint32_t>(buffer, offset);
+    vendor = read<std::uint32_t>(buffer, offset);
     product = read<std::uint32_t>(buffer, offset);
-    offset += sizeof(std::uint32_t);                       // reserved
+    offset += sizeof(std::uint32_t); // reserved
 }
 
 // ── InfoPayload ───────────────────────────────────────────────────────────────
 
-InfoPayload::InfoPayload() : time(0), uptime(0), downtime(0) {}
+InfoPayload::InfoPayload() : time(0), uptime(0), downtime(0) {
+}
 
 void InfoPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, time);
@@ -124,14 +131,15 @@ void InfoPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const 
 }
 
 void InfoPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    time     = read<std::uint64_t>(buffer, offset);
-    uptime   = read<std::uint64_t>(buffer, offset);
+    time = read<std::uint64_t>(buffer, offset);
+    uptime = read<std::uint64_t>(buffer, offset);
     downtime = read<std::uint64_t>(buffer, offset);
 }
 
 // ── LocationPayload ───────────────────────────────────────────────────────────
 
-LocationPayload::LocationPayload() : location{}, label{}, updated_at(0) {}
+LocationPayload::LocationPayload() : location{}, label{}, updated_at(0) {
+}
 
 void LocationPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, location);
@@ -140,14 +148,15 @@ void LocationPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) co
 }
 
 void LocationPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    location   = read<std::array<std::uint8_t, UUID_LENGTH>>(buffer, offset);
-    label      = read<std::array<char, LABEL_LENGTH>>(buffer, offset);
+    location = read<std::array<std::uint8_t, UUID_LENGTH>>(buffer, offset);
+    label = read<std::array<char, LABEL_LENGTH>>(buffer, offset);
     updated_at = read<std::uint64_t>(buffer, offset);
 }
 
 // ── GroupPayload ──────────────────────────────────────────────────────────────
 
-GroupPayload::GroupPayload() : group{}, label{}, updated_at(0) {}
+GroupPayload::GroupPayload() : group{}, label{}, updated_at(0) {
+}
 
 void GroupPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, group);
@@ -156,14 +165,15 @@ void GroupPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const
 }
 
 void GroupPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    group      = read<std::array<std::uint8_t, UUID_LENGTH>>(buffer, offset);
-    label      = read<std::array<char, LABEL_LENGTH>>(buffer, offset);
+    group = read<std::array<std::uint8_t, UUID_LENGTH>>(buffer, offset);
+    label = read<std::array<char, LABEL_LENGTH>>(buffer, offset);
     updated_at = read<std::uint64_t>(buffer, offset);
 }
 
 // ── EchoRequestPayload ────────────────────────────────────────────────────────
 
-EchoRequestPayload::EchoRequestPayload() : payload{} {}
+EchoRequestPayload::EchoRequestPayload() : payload{} {
+}
 
 void EchoRequestPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, payload);
@@ -175,7 +185,8 @@ void EchoRequestPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t 
 
 // ── EchoResponsePayload ───────────────────────────────────────────────────────
 
-EchoResponsePayload::EchoResponsePayload() : payload{} {}
+EchoResponsePayload::EchoResponsePayload() : payload{} {
+}
 
 void EchoResponsePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, payload);
@@ -187,7 +198,8 @@ void EchoResponsePayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t
 
 // ── ButtonConfigPayload (StateButtonConfig) ──────────────────────────────────
 
-ButtonConfigPayload::ButtonConfigPayload() : haptic_duration_ms(0) {}
+ButtonConfigPayload::ButtonConfigPayload() : haptic_duration_ms(0) {
+}
 
 void ButtonConfigPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, haptic_duration_ms);
@@ -203,12 +215,12 @@ void ButtonConfigPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t
 
 // ── ColorPayload (LightState) ─────────────────────────────────────────────────
 
-ColorPayload::ColorPayload()
-    : power(0), label{}, reserved1(0), reserved2(0) {}
+ColorPayload::ColorPayload() : power(0), label{}, reserved1(0), reserved2(0) {
+}
 
 void ColorPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     color.Pack(buffer, offset);
-    write(buffer, offset, static_cast<std::int16_t>(0));  // reserved1
+    write(buffer, offset, static_cast<std::int16_t>(0)); // reserved1
     write(buffer, offset, power);
     write(buffer, offset, label);
     write(buffer, offset, static_cast<std::uint64_t>(0)); // reserved2
@@ -216,15 +228,16 @@ void ColorPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const
 
 void ColorPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     color.Unpack(buffer, offset);
-    offset += sizeof(std::int16_t);                        // reserved1
-    power   = read<std::uint16_t>(buffer, offset);
-    label   = read<std::array<char, LABEL_LENGTH>>(buffer, offset);
-    offset += sizeof(std::uint64_t);                       // reserved2
+    offset += sizeof(std::int16_t); // reserved1
+    power = read<std::uint16_t>(buffer, offset);
+    label = read<std::array<char, LABEL_LENGTH>>(buffer, offset);
+    offset += sizeof(std::uint64_t); // reserved2
 }
 
 // ── LightPowerPayload (StateLightPower) ──────────────────────────────────────
 
-LightPowerPayload::LightPowerPayload() : level(0) {}
+LightPowerPayload::LightPowerPayload() : level(0) {
+}
 
 void LightPowerPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, level);
@@ -236,7 +249,8 @@ void LightPowerPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &
 
 // ── InfraredPayload ───────────────────────────────────────────────────────────
 
-InfraredPayload::InfraredPayload() : brightness(0) {}
+InfraredPayload::InfraredPayload() : brightness(0) {
+}
 
 void InfraredPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, brightness);
@@ -248,7 +262,8 @@ void InfraredPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &of
 
 // ── HevCyclePayload ───────────────────────────────────────────────────────────
 
-HevCyclePayload::HevCyclePayload() : duration_s(0), remaining_s(0), last_power(false) {}
+HevCyclePayload::HevCyclePayload() : duration_s(0), remaining_s(0), last_power(false) {
+}
 
 void HevCyclePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, duration_s);
@@ -257,15 +272,15 @@ void HevCyclePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) co
 }
 
 void HevCyclePayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    duration_s  = read<std::uint32_t>(buffer, offset);
+    duration_s = read<std::uint32_t>(buffer, offset);
     remaining_s = read<std::uint32_t>(buffer, offset);
-    last_power  = static_cast<bool>(read<std::uint8_t>(buffer, offset));
+    last_power = static_cast<bool>(read<std::uint8_t>(buffer, offset));
 }
 
 // ── HevCycleConfigurationPayload ──────────────────────────────────────────────
 
-HevCycleConfigurationPayload::HevCycleConfigurationPayload()
-    : indication(false), duration_s(0) {}
+HevCycleConfigurationPayload::HevCycleConfigurationPayload() : indication(false), duration_s(0) {
+}
 
 void HevCycleConfigurationPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, static_cast<std::uint8_t>(indication ? 1U : 0U));
@@ -279,7 +294,8 @@ void HevCycleConfigurationPayload::Unpack(const std::vector<std::uint8_t> &buffe
 
 // ── LastHevCycleResultPayload ─────────────────────────────────────────────────
 
-LastHevCycleResultPayload::LastHevCycleResultPayload() : result(0) {}
+LastHevCycleResultPayload::LastHevCycleResultPayload() : result(0) {
+}
 
 void LastHevCycleResultPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, result);
@@ -291,7 +307,8 @@ void LastHevCycleResultPayload::Unpack(const std::vector<std::uint8_t> &buffer, 
 
 // ── GetColorZonesPayload ─────────────────────────────────────────────────────
 
-GetColorZonesPayload::GetColorZonesPayload() : start_index(0), end_index(0) {}
+GetColorZonesPayload::GetColorZonesPayload() : start_index(0), end_index(0) {
+}
 
 void GetColorZonesPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, start_index);
@@ -300,12 +317,13 @@ void GetColorZonesPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offse
 
 void GetColorZonesPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     start_index = read<std::uint8_t>(buffer, offset);
-    end_index   = read<std::uint8_t>(buffer, offset);
+    end_index = read<std::uint8_t>(buffer, offset);
 }
 
 // ── StateZonePayload ──────────────────────────────────────────────────────────
 
-StateZonePayload::StateZonePayload() : zones_count(0), zone_index(0) {}
+StateZonePayload::StateZonePayload() : zones_count(0), zone_index(0) {
+}
 
 void StateZonePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, zones_count);
@@ -315,31 +333,37 @@ void StateZonePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) c
 
 void StateZonePayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     zones_count = read<std::uint8_t>(buffer, offset);
-    zone_index  = read<std::uint8_t>(buffer, offset);
+    zone_index = read<std::uint8_t>(buffer, offset);
     color.Unpack(buffer, offset);
 }
 
 // ── ColorZonesPayload (StateMultiZone) ────────────────────────────────────────
 
-ColorZonesPayload::ColorZonesPayload() : count(0), index(0), colors{} {}
+ColorZonesPayload::ColorZonesPayload() : count(0), index(0), colors{} {
+}
 
 void ColorZonesPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, count);
     write(buffer, offset, index);
-    for (const auto &hsbk : colors) { hsbk.Pack(buffer, offset); }
+    for (const auto &hsbk : colors) {
+        hsbk.Pack(buffer, offset);
+    }
 }
 
 void ColorZonesPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     count = read<std::uint8_t>(buffer, offset);
     index = read<std::uint8_t>(buffer, offset);
-    for (auto &hsbk : colors) { hsbk.Unpack(buffer, offset); }
+    for (auto &hsbk : colors) {
+        hsbk.Unpack(buffer, offset);
+    }
 }
 
 // ── MultiZoneEffectPayload ────────────────────────────────────────────────────
 
 MultiZoneEffectPayload::MultiZoneEffectPayload()
-    : instanceid(0), type(0), speed(0), duration(0), parameters{},
-      reserved1(0), reserved2(0), reserved3(0) {}
+    : instanceid(0), type(0), speed(0), duration(0), parameters{}, reserved1(0), reserved2(0),
+      reserved3(0) {
+}
 
 void MultiZoneEffectPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, instanceid);
@@ -349,42 +373,52 @@ void MultiZoneEffectPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &off
     write(buffer, offset, duration);
     write(buffer, offset, static_cast<std::uint32_t>(0)); // reserved2
     write(buffer, offset, static_cast<std::uint32_t>(0)); // reserved3
-    for (const auto param : parameters) { write(buffer, offset, param); }
+    for (const auto param : parameters) {
+        write(buffer, offset, param);
+    }
 }
 
 void MultiZoneEffectPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    instanceid  = read<std::uint32_t>(buffer, offset);
-    type        = read<std::uint8_t>(buffer, offset);
-    offset     += sizeof(std::uint16_t);                   // reserved1
-    speed       = read<std::uint32_t>(buffer, offset);
-    duration    = read<std::uint64_t>(buffer, offset);
-    offset     += sizeof(std::uint32_t);                   // reserved2
-    offset     += sizeof(std::uint32_t);                   // reserved3
-    for (auto &param : parameters) { param = read<std::uint32_t>(buffer, offset); }
+    instanceid = read<std::uint32_t>(buffer, offset);
+    type = read<std::uint8_t>(buffer, offset);
+    offset += sizeof(std::uint16_t); // reserved1
+    speed = read<std::uint32_t>(buffer, offset);
+    duration = read<std::uint64_t>(buffer, offset);
+    offset += sizeof(std::uint32_t); // reserved2
+    offset += sizeof(std::uint32_t); // reserved3
+    for (auto &param : parameters) {
+        param = read<std::uint32_t>(buffer, offset);
+    }
 }
 
 // ── ExtendedColorZonesPayload ─────────────────────────────────────────────────
 
 ExtendedColorZonesPayload::ExtendedColorZonesPayload()
-    : zones_count(0), zone_index(0), colors_count(0), colors{} {}
+    : zones_count(0), zone_index(0), colors_count(0), colors{} {
+}
 
 void ExtendedColorZonesPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, zones_count);
     write(buffer, offset, zone_index);
     write(buffer, offset, colors_count);
-    for (const auto &hsbk : colors) { hsbk.Pack(buffer, offset); }
+    for (const auto &hsbk : colors) {
+        hsbk.Pack(buffer, offset);
+    }
 }
 
 void ExtendedColorZonesPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    zones_count  = read<std::uint16_t>(buffer, offset);
-    zone_index   = read<std::uint16_t>(buffer, offset);
+    zones_count = read<std::uint16_t>(buffer, offset);
+    zone_index = read<std::uint16_t>(buffer, offset);
     colors_count = read<std::uint8_t>(buffer, offset);
-    for (auto &hsbk : colors) { hsbk.Unpack(buffer, offset); }
+    for (auto &hsbk : colors) {
+        hsbk.Unpack(buffer, offset);
+    }
 }
 
 // ── RPowerPayload ─────────────────────────────────────────────────────────────
 
-RPowerPayload::RPowerPayload() : relay_index(0), level(0) {}
+RPowerPayload::RPowerPayload() : relay_index(0), level(0) {
+}
 
 void RPowerPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, relay_index);
@@ -393,30 +427,34 @@ void RPowerPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) cons
 
 void RPowerPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     relay_index = read<std::uint8_t>(buffer, offset);
-    level       = read<std::uint16_t>(buffer, offset);
+    level = read<std::uint16_t>(buffer, offset);
 }
 
 // ── DeviceChainPayload ────────────────────────────────────────────────────────
 
-DeviceChainPayload::DeviceChainPayload()
-    : start_index(0), tile_devices{}, tile_devices_count(0) {}
+DeviceChainPayload::DeviceChainPayload() : start_index(0), tile_devices{}, tile_devices_count(0) {
+}
 
 void DeviceChainPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, start_index);
-    for (const auto &tile : tile_devices) { tile.Pack(buffer, offset); }
+    for (const auto &tile : tile_devices) {
+        tile.Pack(buffer, offset);
+    }
     write(buffer, offset, tile_devices_count);
 }
 
 void DeviceChainPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     start_index = read<std::uint8_t>(buffer, offset);
-    for (auto &tile : tile_devices) { tile.Unpack(buffer, offset); }
+    for (auto &tile : tile_devices) {
+        tile.Unpack(buffer, offset);
+    }
     tile_devices_count = read<std::uint8_t>(buffer, offset);
 }
 
 // ── Get64Payload ──────────────────────────────────────────────────────────────
 
-Get64Payload::Get64Payload()
-    : tile_index(0), length(0), x(0), y(0), width(0), reserved(0) {}
+Get64Payload::Get64Payload() : tile_index(0), length(0), x(0), y(0), width(0), reserved(0) {
+}
 
 void Get64Payload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, tile_index);
@@ -429,17 +467,17 @@ void Get64Payload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const
 
 void Get64Payload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     tile_index = read<std::uint8_t>(buffer, offset);
-    length     = read<std::uint8_t>(buffer, offset);
-    offset    += sizeof(std::uint8_t);                    // reserved
-    x          = read<std::uint8_t>(buffer, offset);
-    y          = read<std::uint8_t>(buffer, offset);
-    width      = read<std::uint8_t>(buffer, offset);
+    length = read<std::uint8_t>(buffer, offset);
+    offset += sizeof(std::uint8_t); // reserved
+    x = read<std::uint8_t>(buffer, offset);
+    y = read<std::uint8_t>(buffer, offset);
+    width = read<std::uint8_t>(buffer, offset);
 }
 
 // ── State64Payload ────────────────────────────────────────────────────────────
 
-State64Payload::State64Payload()
-    : tile_index(0), x(0), y(0), width(0), colors{}, reserved(0) {}
+State64Payload::State64Payload() : tile_index(0), x(0), y(0), width(0), colors{}, reserved(0) {
+}
 
 void State64Payload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, tile_index);
@@ -447,26 +485,31 @@ void State64Payload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) con
     write(buffer, offset, x);
     write(buffer, offset, y);
     write(buffer, offset, width);
-    for (const auto &hsbk : colors) { hsbk.Pack(buffer, offset); }
+    for (const auto &hsbk : colors) {
+        hsbk.Pack(buffer, offset);
+    }
 }
 
 void State64Payload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     tile_index = read<std::uint8_t>(buffer, offset);
-    offset    += sizeof(std::uint8_t);                    // reserved
-    x          = read<std::uint8_t>(buffer, offset);
-    y          = read<std::uint8_t>(buffer, offset);
-    width      = read<std::uint8_t>(buffer, offset);
-    for (auto &hsbk : colors) { hsbk.Unpack(buffer, offset); }
+    offset += sizeof(std::uint8_t); // reserved
+    x = read<std::uint8_t>(buffer, offset);
+    y = read<std::uint8_t>(buffer, offset);
+    width = read<std::uint8_t>(buffer, offset);
+    for (auto &hsbk : colors) {
+        hsbk.Unpack(buffer, offset);
+    }
 }
 
 // ── TileEffectPayload (StateTileEffect) ───────────────────────────────────────
 
 TileEffectPayload::TileEffectPayload()
-    : instanceid(0), type(0), speed(0), duration(0), palette_count(0), palette{},
-      reserved1(0), reserved2(0), reserved3(0) {}
+    : instanceid(0), type(0), speed(0), duration(0), palette_count(0), palette{}, reserved1(0),
+      reserved2(0), reserved3(0) {
+}
 
 void TileEffectPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
-    write(buffer, offset, static_cast<std::uint8_t>(0));  // reserved1
+    write(buffer, offset, static_cast<std::uint8_t>(0)); // reserved1
     write(buffer, offset, instanceid);
     write(buffer, offset, type);
     write(buffer, offset, speed);
@@ -474,24 +517,29 @@ void TileEffectPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) 
     write(buffer, offset, static_cast<std::uint32_t>(0)); // reserved2
     write(buffer, offset, static_cast<std::uint32_t>(0)); // reserved3
     write(buffer, offset, palette_count);
-    for (const auto &hsbk : palette) { hsbk.Pack(buffer, offset); }
+    for (const auto &hsbk : palette) {
+        hsbk.Pack(buffer, offset);
+    }
 }
 
 void TileEffectPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
-    offset       += sizeof(std::uint8_t);                  // reserved1
-    instanceid    = read<std::uint32_t>(buffer, offset);
-    type          = read<std::uint8_t>(buffer, offset);
-    speed         = read<std::uint32_t>(buffer, offset);
-    duration      = read<std::uint64_t>(buffer, offset);
-    offset       += sizeof(std::uint32_t);                 // reserved2
-    offset       += sizeof(std::uint32_t);                 // reserved3
+    offset += sizeof(std::uint8_t); // reserved1
+    instanceid = read<std::uint32_t>(buffer, offset);
+    type = read<std::uint8_t>(buffer, offset);
+    speed = read<std::uint32_t>(buffer, offset);
+    duration = read<std::uint64_t>(buffer, offset);
+    offset += sizeof(std::uint32_t); // reserved2
+    offset += sizeof(std::uint32_t); // reserved3
     palette_count = read<std::uint8_t>(buffer, offset);
-    for (auto &hsbk : palette) { hsbk.Unpack(buffer, offset); }
+    for (auto &hsbk : palette) {
+        hsbk.Unpack(buffer, offset);
+    }
 }
 
 // ── SensorAmbientLightPayload ─────────────────────────────────────────────────
 
-SensorAmbientLightPayload::SensorAmbientLightPayload() : lux(0.0F) {}
+SensorAmbientLightPayload::SensorAmbientLightPayload() : lux(0.0F) {
+}
 
 void SensorAmbientLightPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
     write(buffer, offset, lux);

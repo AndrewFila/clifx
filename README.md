@@ -1,6 +1,14 @@
 # clifx
 
+[![Build](https://github.com/AndrewFila/clifx/actions/workflows/build.yml/badge.svg)](https://github.com/AndrewFila/clifx/actions/workflows/build.yml)
+
 [![Tests](https://github.com/AndrewFila/clifx/actions/workflows/tests.yml/badge.svg)](https://github.com/AndrewFila/clifx/actions/workflows/tests.yml)
+
+[![Coverage](https://codecov.io/gh/AndrewFila/clifx/badge.svg)](https://codecov.io/gh/AndrewFila/clifx)
+
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](LICENSE)
+
+[![Release](https://img.shields.io/github/v/release/AndrewFila/clifx)](https://github.com/AndrewFila/clifx/releases)
 
 **Testing**
 
@@ -44,7 +52,7 @@ This produces `libpackets.a` (the actual sources) behind an `INTERFACE` target n
 
 Every packet type implements `Pack(buffer, offset)` / `Unpack(buffer, offset)`. Fields must be read/written in the order they're declared in the header — the wire format is positional, not named.
 
-*Building a `SetColor` packet:*
+_Building a `SetColor` packet:_
 
 ```cpp
 #include "packets/setters.hpp"
@@ -70,7 +78,7 @@ int main() {
 }
 ```
 
-*Parsing a received `StateService` (discovery) response:*
+_Parsing a received `StateService` (discovery) response:_
 
 ```cpp
 #include "packets/getters.hpp"
@@ -94,19 +102,19 @@ void handleResponse(const std::vector<std::uint8_t> &buffer) {
 
 A representative sample of what's implemented — see `packets/getters.hpp` / `packets/setters.hpp` for the full list, including MultiZone and Tile messages.
 
-| Purpose            | Set (`CLifx::Set::`)       | State (`CLifx::Get::`)     |
-|--------------------|-----------------------------|-----------------------------|
-| Power               | `PowerPayload` (21)         | `PowerPayload` (22)         |
-| Label               | `LabelPayload` (24)         | `LabelPayload` (25)         |
-| Color               | `ColorPayload` (102)        | `ColorPayload` (107)        |
-| Waveform            | `WaveformPayload` (103)     | —                            |
-| Light power         | `LightPowerPayload` (117)   | `LightPowerPayload` (118)   |
-| Infrared            | `InfraredPayload` (122)     | `InfraredPayload` (121)     |
-| Discovery           | —                            | `ServicePayload` (3)        |
-| Echo                | —                            | `EchoRequestPayload` (58) / `EchoResponsePayload` (59) |
-| MultiZone query     | —                            | `GetColorZonesPayload` (502) / `StateZonePayload` (503) |
-| Tile framebuffer    | `CopyFrameBufferPayload` (716) | `State64Payload` (711)   |
-| Button config (Switch) | `ButtonConfigPayload` (910) | `ButtonConfigPayload` (911) |
+| Purpose                | Set (`CLifx::Set::`)           | State (`CLifx::Get::`)                                  |
+| ---------------------- | ------------------------------ | ------------------------------------------------------- |
+| Power                  | `PowerPayload` (21)            | `PowerPayload` (22)                                     |
+| Label                  | `LabelPayload` (24)            | `LabelPayload` (25)                                     |
+| Color                  | `ColorPayload` (102)           | `ColorPayload` (107)                                    |
+| Waveform               | `WaveformPayload` (103)        | —                                                       |
+| Light power            | `LightPowerPayload` (117)      | `LightPowerPayload` (118)                               |
+| Infrared               | `InfraredPayload` (122)        | `InfraredPayload` (121)                                 |
+| Discovery              | —                              | `ServicePayload` (3)                                    |
+| Echo                   | —                              | `EchoRequestPayload` (58) / `EchoResponsePayload` (59)  |
+| MultiZone query        | —                              | `GetColorZonesPayload` (502) / `StateZonePayload` (503) |
+| Tile framebuffer       | `CopyFrameBufferPayload` (716) | `State64Payload` (711)                                  |
+| Button config (Switch) | `ButtonConfigPayload` (910)    | `ButtonConfigPayload` (911)                             |
 
 `ButtonConfigPayload` (910/911) covers the LIFX Switch's per-device haptic feedback duration and on/off backlight colors.
 

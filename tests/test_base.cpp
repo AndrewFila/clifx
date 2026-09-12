@@ -12,10 +12,10 @@ using CLifx::Tile;
 
 TEST(HSBKTest, RoundTrip) {
     HSBK original;
-    original.hue        = 1111;
+    original.hue = 1111;
     original.saturation = 2222;
     original.brightness = 3333;
-    original.kelvin     = 4444;
+    original.kelvin = 4444;
 
     auto buffer = PackToBuffer(original);
     EXPECT_EQ(buffer.size(), 8U);
@@ -29,20 +29,20 @@ TEST(HSBKTest, RoundTrip) {
 
 TEST(TileTest, RoundTrip) {
     Tile original;
-    original.accel_meas_x           = -100;
-    original.accel_meas_y           = 200;
-    original.accel_meas_z           = -300;
-    original.user_x                 = 1.5F;
-    original.user_y                 = -2.5F;
-    original.width                  = 8;
-    original.height                 = 8;
-    original.device_version_vendor  = 1;
+    original.accel_meas_x = -100;
+    original.accel_meas_y = 200;
+    original.accel_meas_z = -300;
+    original.user_x = 1.5F;
+    original.user_y = -2.5F;
+    original.width = 8;
+    original.height = 8;
+    original.device_version_vendor = 1;
     original.device_version_product = 55;
-    original.firmware_build         = 123456789ULL;
+    original.firmware_build = 123456789ULL;
     original.firmware_version_minor = 3;
     original.firmware_version_major = 2;
 
-    auto buffer   = PackToBuffer(original);
+    auto buffer = PackToBuffer(original);
     auto restored = UnpackFromBuffer<Tile>(buffer);
 
     EXPECT_EQ(restored.accel_meas_x, -100);
@@ -69,7 +69,7 @@ TEST(FrameHeaderTest, DefaultsMatchLifxProtocolConstants) {
 
 TEST(FrameHeaderTest, RoundTrip) {
     FrameHeader original;
-    original.size   = 100;
+    original.size = 100;
     original.tagged = true;
     original.source = 0xABCDEF01;
 
@@ -87,14 +87,14 @@ TEST(FrameHeaderTest, RoundTrip) {
 
 TEST(FrameHeaderTest, BitPackingLayoutMatchesLifxSpec) {
     FrameHeader header;
-    header.tagged      = true;
+    header.tagged = true;
     header.addressable = true;
-    header.origin       = 0;
+    header.origin = 0;
 
     auto buffer = PackToBuffer(header);
     // bytes 2-3: protocol(12 bits) | addressable(1) | tagged(1) | origin(2), little-endian
-    auto word = static_cast<std::uint16_t>(
-        static_cast<std::uint16_t>(buffer[2]) | (static_cast<std::uint16_t>(buffer[3]) << 8));
+    auto word = static_cast<std::uint16_t>(static_cast<std::uint16_t>(buffer[2]) |
+                                           (static_cast<std::uint16_t>(buffer[3]) << 8));
     EXPECT_EQ(word & 0x0FFFU, 1024U);
     EXPECT_EQ((word >> 12) & 0x1U, 1U); // addressable
     EXPECT_EQ((word >> 13) & 0x1U, 1U); // tagged
@@ -103,10 +103,10 @@ TEST(FrameHeaderTest, BitPackingLayoutMatchesLifxSpec) {
 
 TEST(FrameAddressTest, RoundTrip) {
     FrameAddress original;
-    original.target       = 0x0102030405060708ULL;
-    original.res_required  = true;
-    original.ack_required  = false;
-    original.sequence      = 42;
+    original.target = 0x0102030405060708ULL;
+    original.res_required = true;
+    original.ack_required = false;
+    original.sequence = 42;
 
     auto buffer = PackToBuffer(original);
     EXPECT_EQ(buffer.size(), 16U);
@@ -139,11 +139,11 @@ TEST(ProtocolHeaderTest, RoundTrip) {
 
 TEST(HeaderTest, RoundTrip) {
     Header original;
-    original.frame_header.tagged   = true;
-    original.frame_header.source   = 0x11223344;
-    original.frame_address.target  = 0x0102030405060708ULL;
+    original.frame_header.tagged = true;
+    original.frame_header.source = 0x11223344;
+    original.frame_address.target = 0x0102030405060708ULL;
     original.frame_address.sequence = 7;
-    original.protocol_header.type  = 102;
+    original.protocol_header.type = 102;
 
     auto buffer = PackToBuffer(original);
     EXPECT_EQ(buffer.size(), 36U);
@@ -167,7 +167,7 @@ TEST(PacketTest, PackWithNoPayloadWritesHeaderOnlySize) {
     EXPECT_EQ(buffer.size(), 36U);
     EXPECT_EQ(offset, 36U);
 
-    auto size = static_cast<std::uint16_t>(
-        static_cast<std::uint16_t>(buffer[0]) | (static_cast<std::uint16_t>(buffer[1]) << 8));
+    auto size = static_cast<std::uint16_t>(static_cast<std::uint16_t>(buffer[0]) |
+                                           (static_cast<std::uint16_t>(buffer[1]) << 8));
     EXPECT_EQ(size, 36U);
 }

@@ -6,14 +6,17 @@ namespace {
 // Utils::Packable's read/write helpers are protected — expose them for direct testing.
 class TestPackable : public Utils::Packable {
   public:
-    void Pack(std::vector<std::uint8_t> & /*buffer*/, size_t & /*offset*/) const override {}
-    void Unpack(const std::vector<std::uint8_t> & /*buffer*/, size_t & /*offset*/) override {}
+    void Pack(std::vector<std::uint8_t> & /*buffer*/, size_t & /*offset*/) const override {
+    }
+    void Unpack(const std::vector<std::uint8_t> & /*buffer*/, size_t & /*offset*/) override {
+    }
 
     template <typename T>
     static void CallWrite(std::vector<std::uint8_t> &buffer, size_t &offset, T val) {
         write(buffer, offset, val);
     }
-    template <typename T> static T CallRead(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    template <typename T>
+    static T CallRead(const std::vector<std::uint8_t> &buffer, size_t &offset) {
         return read<T>(buffer, offset);
     }
 };
@@ -57,7 +60,7 @@ TEST(PackableTest, ReadDoesNotConsumeUnrelatedTrailingBytes) {
     TestPackable::CallWrite<std::uint16_t>(buffer, offset, 2);
 
     size_t readOffset = 0;
-    auto first  = TestPackable::CallRead<std::uint16_t>(buffer, readOffset);
+    auto first = TestPackable::CallRead<std::uint16_t>(buffer, readOffset);
     auto second = TestPackable::CallRead<std::uint16_t>(buffer, readOffset);
 
     EXPECT_EQ(first, 1);

@@ -1,0 +1,29 @@
+name: Sanitizers
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  sanitizers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: >
+          cmake -B build -DCMAKE_BUILD_TYPE=Debug
+          -DCLIFX_ENABLE_ASAN=ON
+          -DCLIFX_ENABLE_UBSAN=ON
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        working-directory: build
+        env:
+          ASAN_OPTIONS: detect_leaks=1
+          UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
+        run: ctest --output-on-failure
