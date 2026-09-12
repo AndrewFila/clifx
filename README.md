@@ -2,67 +2,100 @@
 
 **Description**
 
-clifx is an implementation of the [lifx LAN protocol](https://lan.developer.lifx.com/docs) written in C++ for unix systems. Clifx has been only tested on
-arch linux, support for other operating systems is a plan for the future.
+clifx is a C++20 implementation of the [LIFX LAN protocol](https://lan.developer.lifx.com/docs) message layer — it packs and unpacks LIFX packets to and from raw byte buffers.
 
-**Functionality**
+clifx is a **library only**. It has no networking code, no sockets, and no CLI — it just builds and parses the bytes that go on the wire. This is intentional: a byte-packing library can be shared as-is between very different consumers (a desktop CLI over POSIX sockets, an ESP32 device over lwIP, etc.), each of which owns its own transport layer.
 
-- Setting the power state of lifx lights on the local network
-- Setting color, brightness, saturation, and kelvin level of lights as well as the duration of change.
-- Setting a waveform for lights. see [waveforms](https://lan.developer.lifx.com/docs/waveforms) for more information
-- A command line application capible of using the above functionality
+**What's in the repo**
 
-**Future Plans**
+- `utils/packable.hpp` — the `Utils::Packable` interface (`Pack`/`Unpack`) and the `read`/`write` byte helpers every packet type is built on.
+- `packets/base.hpp` / `base.cpp` — the LIFX frame layout: `FrameHeader`, `FrameAddress`, `ProtocolHeader`, `Header`, `Packet`, plus shared value types `HSBK` (hue/saturation/brightness/kelvin) and `Tile`.
+- `packets/getters.hpp` / `getters.cpp` — `CLifx::Get::*` payloads: the `State*` responses devices send back (e.g. `StatePower`, `StateColor`/`LightState`, `StateGroup`).
+- `packets/setters.hpp` / `setters.cpp` — `CLifx::Set::*` payloads: the `Set*` commands you send to a device (e.g. `SetPower`, `SetColor`, `SetWaveform`).
 
-- Implementation of other supported functionality such as setting waveforms, infared, and HEV cycles in supported lights.
-- The ability to get information from the lights such as power level, color, brightness, and saturation.
-- A GUI application for use on linux systems.
-- Cross platform implemenation of this entire library as well as GUI and CLI applications.
+Getters and setters are split into separate `Get`/`Set` namespaces because several message pairs share a name (both a `Get::PowerPayload` and a `Set::PowerPayload` exist, for the `StatePower` and `SetPower` messages respectively).
 
-**Available functions**
+**Building**
 
-`void setLightPower(bool onOff, uint32_t duration, uint8_t target[8])`
-- onOff -- a boolian value that determines the power state of the device. <1 -- on, 0 -- off>
-- duration -- the time in miliseconds to turn on.
-- target -- device to be targeted (see example for more information)
-
-`void setColor(uint16_t hue, float saturation, float brightness, uint16_t kelvin, uint32_t duration, uint8_t target[8])`
-- hue -- the color to set the light in HSBK <int 0 - 360>
-- saturation -- the saturation of the color <float 0.0 - 1.0>
-- brightness -- the brightness of the device <float 0.0 - 1.0>
-- kelvin -- the kevlin level of the light (if saturation is greater than 0 the value of this does not matter) <int 1500 - 9000>
-- duration -- the time in miliseconds to change colors.
-- target -- device to be targeted (see example for more information)
-
-`void setWaveform(bool transient, uint16_t hue, float saturation, float brightness, uint16_t kelvin, uint32_t period, float cycles, float skew_ratio, uint8_t waveform, uint8_t target[8])`
-- transient
-- hue -- the color to transition to from the current color in HSBK <int 0 - 360>
-- saturation -- the saturation of the color. <float 0.0 - 1.0>
-- brightness -- the brightness of the device. <float 0.0 - 1.0>
-- kelvin -- the kevlin level of the light. (if saturation is greater than 0 the value of this does not matter) <int 1500 - 9000>
-- period -- the period of a wave in miliseconds.
-- cycles -- the number of cycles before the effect is over.
-- skew_ratio -- defines the duty cycle in pulse waves. (no effect on any other waveforms) <float 0.0 - 1.0>
-- waveform -- defines the waveform to use based on the waveform enum. <SAW = 0, SINE = 1, HALF_SINE = 2, TRIANGLE = 3, PULSE = 4>
-- target -- device to be targeted. (see example for more information)
-
-**Examples**
-
+```sh
+cmake -B build
+cmake --build build
 ```
-//example.cpp
-//program to turn on all lights and set the color to green at 100% saturation and 50% brightness.
 
+This produces `libclifx.a`. `CMakeLists.txt` exposes the repo root as a public include directory, so a consuming project can point at this repo (as a subdirectory, submodule, or installed package) and include headers as shown below.
 
-int main(){
-  uint8_t target[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; // The target specifies which lights to change based on its mac address
-                                                                       // ex. AB:CD:EF:12:34:56:78:90 -> {0xAB, 0xCD, 0xEF, 0x12, 0x34, 0x56, 0x78, 0x90}
-                                                                        // A target with all zeros will change all ligths
-  clifx lightController;  // decalre a clifx object
-  lightController.setLightPower(1, 0, target);  // turn the power on with no delay
-  lightController.setColor(120, 1, .5, 0, 0, target); //sets the color to bright green (120deg) with a sautration of 100%, a brightness of 50%,
-                                                      //kelvin value of 0 (since we are using a saturation of >0% kelvin can be set to anything),
-                                                      //and a duration of 0.
-  lightController.~clifx(); //deconstructor, closes our udp socket created by the constructor.
-  exit(SUCCESS);
+**Usage**
+
+Every packet type implements `Pack(buffer, offset)` / `Unpack(buffer, offset)`. Fields must be read/written in the order they're declared in the header — the wire format is positional, not named.
+
+*Building a `SetColor` packet:*
+
+```cpp
+#include "packets/setters.hpp"
+#include <vector>
+
+int main() {
+    CLifx::Packet pkt;
+    pkt.header.frame_header.tagged = true;      // true = broadcast to all devices
+    pkt.header.frame_header.source = 0x12345678; // arbitrary ID identifying this client
+
+    auto *payload      = pkt.setPayload<CLifx::Set::ColorPayload>();
+    payload->color.hue        = 0;       // 0   =   0° (red)
+    payload->color.saturation = 0xFFFF;  // full saturation
+    payload->color.brightness = 0xFFFF;  // full brightness
+    payload->color.kelvin     = 3500;
+    payload->duration         = 1000;    // ms to transition over
+
+    std::vector<std::uint8_t> buffer;
+    std::size_t offset = 0;
+    pkt.Pack(buffer, offset);
+    // buffer now holds a complete LIFX packet ready to send over UDP
+    // to 255.255.255.255:56700 (broadcast) or a device's IP:56700.
 }
 ```
+
+*Parsing a received `StateService` (discovery) response:*
+
+```cpp
+#include "packets/getters.hpp"
+
+void handleResponse(const std::vector<std::uint8_t> &buffer) {
+    CLifx::Packet pkt;
+    std::size_t offset = 0;
+    pkt.header.Unpack(buffer, offset); // unpack the header first...
+
+    if (pkt.header.protocol_header.type == CLifx::Get::ServicePayload::MessageType) {
+        CLifx::Get::ServicePayload service;
+        service.Unpack(buffer, offset); // ...then the payload that follows it
+        // service.port now holds the device's service port
+    }
+}
+```
+
+`Packet::Unpack` will also unpack `payload` for you, but only if one is already assigned — since the payload type depends on the message type read from the header, unpack the header first, look at `protocol_header.type`, then construct and unpack the matching payload (as above), or assign `pkt.payload` yourself before calling `pkt.Unpack(...)` if you already know the type.
+
+**Message types**
+
+A representative sample of what's implemented — see `packets/getters.hpp` / `packets/setters.hpp` for the full list, including MultiZone and Tile messages.
+
+| Purpose            | Set (`CLifx::Set::`)       | State (`CLifx::Get::`)     |
+|--------------------|-----------------------------|-----------------------------|
+| Power               | `PowerPayload` (21)         | `PowerPayload` (22)         |
+| Label               | `LabelPayload` (24)         | `LabelPayload` (25)         |
+| Color               | `ColorPayload` (102)        | `ColorPayload` (107)        |
+| Waveform            | `WaveformPayload` (103)     | —                            |
+| Light power         | `LightPowerPayload` (117)   | —                            |
+| Infrared            | `InfraredPayload` (122)     | `InfraredPayload` (121)     |
+| Discovery           | —                            | `ServicePayload` (3)        |
+
+**Not included (by design)**
+
+- Sockets / UDP transport — bring your own (POSIX sockets, lwIP, etc.)
+- Device discovery logic — build it on top of `Get::ServicePayload`
+- A CLI or GUI — see the companion `clifx-cli` project
+
+**Future plans**
+
+- Round out remaining LIFX message payloads not yet covered.
+- A separate `clifx-cli` project (POSIX sockets) that depends on this library.
+- A separate `clifx-hw-esp32` project (lwIP) that depends on this library.
