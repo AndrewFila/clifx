@@ -1,4 +1,3 @@
 /home/andrew/projects/clifx/build/CMakeFiles/clifx.dir
-/home/andrew/projects/clifx/build/CMakeFiles/clifx_test.dir
 /home/andrew/projects/clifx/build/CMakeFiles/edit_cache.dir
 /home/andrew/projects/clifx/build/CMakeFiles/rebuild_cache.dir
