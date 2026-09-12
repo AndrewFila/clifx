@@ -4,7 +4,7 @@
 
 **Testing**
 
-Every `Pack`/`Unpack` implementation is covered by a GoogleTest round-trip test (pack a value, unpack it back, assert the fields survived), plus targeted tests for the trickier bits — `FrameHeader`'s bit-packed protocol/addressable/tagged/origin word, `FrameAddress`'s reserved-byte zeroing, and `Packet`'s size-field patching. As of the last update: **102 tests, 100% passing** across the `Utils::Packable` helpers, every `packets/base.hpp` type, and every `CLifx::Get::*` / `CLifx::Set::*` payload. The badge above reflects the live status of the `main` branch.
+Every `Pack`/`Unpack` implementation is covered by a GoogleTest round-trip test (pack a value, unpack it back, assert the fields survived), plus targeted tests for the trickier bits — `FrameHeader`'s bit-packed protocol/addressable/tagged/origin word, `FrameAddress`'s reserved-byte zeroing, and `Packet`'s size-field patching. As of the last update: **118 tests, 100% passing** across the `Utils::Packable` helpers, every `packets/base.hpp` type, and every `CLifx::Get::*` / `CLifx::Set::*` payload. The badge above reflects the live status of the `main` branch.
 
 Tests run automatically on every push/PR via GitHub Actions (`.github/workflows/tests.yml`). To run them locally:
 
@@ -100,9 +100,15 @@ A representative sample of what's implemented — see `packets/getters.hpp` / `p
 | Label               | `LabelPayload` (24)         | `LabelPayload` (25)         |
 | Color               | `ColorPayload` (102)        | `ColorPayload` (107)        |
 | Waveform            | `WaveformPayload` (103)     | —                            |
-| Light power         | `LightPowerPayload` (117)   | —                            |
+| Light power         | `LightPowerPayload` (117)   | `LightPowerPayload` (118)   |
 | Infrared            | `InfraredPayload` (122)     | `InfraredPayload` (121)     |
 | Discovery           | —                            | `ServicePayload` (3)        |
+| Echo                | —                            | `EchoRequestPayload` (58) / `EchoResponsePayload` (59) |
+| MultiZone query     | —                            | `GetColorZonesPayload` (502) / `StateZonePayload` (503) |
+| Tile framebuffer    | `CopyFrameBufferPayload` (716) | `State64Payload` (711)   |
+| Button config (Switch) | `ButtonConfigPayload` (910) | `ButtonConfigPayload` (911) |
+
+`ButtonConfigPayload` (910/911) covers the LIFX Switch's per-device haptic feedback duration and on/off backlight colors.
 
 **Not included (by design)**
 

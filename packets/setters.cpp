@@ -282,6 +282,22 @@ void RPowerPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offs
     level       = read<std::uint16_t>(buffer, offset);
 }
 
+// ── ButtonConfigPayload (SetButtonConfig) ────────────────────────────────────
+
+ButtonConfigPayload::ButtonConfigPayload() : haptic_duration_ms(0) {}
+
+void ButtonConfigPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
+    write(buffer, offset, haptic_duration_ms);
+    backlight_on_color.Pack(buffer, offset);
+    backlight_off_color.Pack(buffer, offset);
+}
+
+void ButtonConfigPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    haptic_duration_ms = read<std::uint16_t>(buffer, offset);
+    backlight_on_color.Unpack(buffer, offset);
+    backlight_off_color.Unpack(buffer, offset);
+}
+
 // ── UserPositionPayload ───────────────────────────────────────────────────────
 
 UserPositionPayload::UserPositionPayload()
@@ -327,6 +343,42 @@ void Set64Payload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offse
     width      = read<std::uint8_t>(buffer, offset);
     duration   = read<std::uint32_t>(buffer, offset);
     for (auto &hsbk : colors) { hsbk.Unpack(buffer, offset); }
+}
+
+// ── CopyFrameBufferPayload ────────────────────────────────────────────────────
+
+CopyFrameBufferPayload::CopyFrameBufferPayload()
+    : tile_index(0), length(0), src_fb_index(0), dst_fb_index(0), src_x(0), src_y(0),
+      dst_x(0), dst_y(0), width(0), height(0), duration(0), reserved(0) {}
+
+void CopyFrameBufferPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
+    write(buffer, offset, tile_index);
+    write(buffer, offset, length);
+    write(buffer, offset, src_fb_index);
+    write(buffer, offset, dst_fb_index);
+    write(buffer, offset, src_x);
+    write(buffer, offset, src_y);
+    write(buffer, offset, dst_x);
+    write(buffer, offset, dst_y);
+    write(buffer, offset, width);
+    write(buffer, offset, height);
+    write(buffer, offset, duration);
+    write(buffer, offset, static_cast<std::uint8_t>(0)); // reserved
+}
+
+void CopyFrameBufferPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    tile_index   = read<std::uint8_t>(buffer, offset);
+    length       = read<std::uint8_t>(buffer, offset);
+    src_fb_index = read<std::uint8_t>(buffer, offset);
+    dst_fb_index = read<std::uint8_t>(buffer, offset);
+    src_x        = read<std::uint8_t>(buffer, offset);
+    src_y        = read<std::uint8_t>(buffer, offset);
+    dst_x        = read<std::uint8_t>(buffer, offset);
+    dst_y        = read<std::uint8_t>(buffer, offset);
+    width        = read<std::uint8_t>(buffer, offset);
+    height       = read<std::uint8_t>(buffer, offset);
+    duration     = read<std::uint32_t>(buffer, offset);
+    offset      += sizeof(std::uint8_t);                    // reserved
 }
 
 // ── TileEffectPayload ─────────────────────────────────────────────────────────

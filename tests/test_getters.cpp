@@ -148,6 +148,36 @@ TEST(EchoRequestPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.payload, original.payload);
 }
 
+TEST(EchoResponsePayloadTest, MessageType) { EXPECT_EQ(EchoResponsePayload::MessageType, 59); }
+TEST(EchoResponsePayloadTest, RoundTrip) {
+    EchoResponsePayload original;
+    for (std::size_t i = 0; i < original.payload.size(); ++i) {
+        original.payload[i] = static_cast<std::uint8_t>(i * 2);
+    }
+
+    auto restored = UnpackFromBuffer<EchoResponsePayload>(PackToBuffer(original));
+
+    EXPECT_EQ(restored.payload, original.payload);
+}
+
+TEST(GetButtonConfigPayloadTest, MessageType) { EXPECT_EQ(ButtonConfigPayload::MessageType, 911); }
+TEST(GetButtonConfigPayloadTest, RoundTrip) {
+    ButtonConfigPayload original;
+    original.haptic_duration_ms      = 250;
+    original.backlight_on_color.hue  = 100;
+    original.backlight_on_color.kelvin = 3500;
+    original.backlight_off_color.hue = 200;
+    original.backlight_off_color.kelvin = 2700;
+
+    auto restored = UnpackFromBuffer<ButtonConfigPayload>(PackToBuffer(original));
+
+    EXPECT_EQ(restored.haptic_duration_ms, 250);
+    EXPECT_EQ(restored.backlight_on_color.hue, 100);
+    EXPECT_EQ(restored.backlight_on_color.kelvin, 3500);
+    EXPECT_EQ(restored.backlight_off_color.hue, 200);
+    EXPECT_EQ(restored.backlight_off_color.kelvin, 2700);
+}
+
 TEST(GetColorPayloadTest, MessageType) { EXPECT_EQ(ColorPayload::MessageType, 107); }
 TEST(GetColorPayloadTest, RoundTrip) {
     ColorPayload original;
@@ -168,6 +198,16 @@ TEST(GetColorPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.color.kelvin, 4000);
     EXPECT_EQ(restored.power, 65535);
     EXPECT_EQ(restored.label, original.label);
+}
+
+TEST(GetLightPowerPayloadTest, MessageType) { EXPECT_EQ(LightPowerPayload::MessageType, 118); }
+TEST(GetLightPowerPayloadTest, RoundTrip) {
+    LightPowerPayload original;
+    original.level = 32768;
+
+    auto restored = UnpackFromBuffer<LightPowerPayload>(PackToBuffer(original));
+
+    EXPECT_EQ(restored.level, 32768);
 }
 
 TEST(GetInfraredPayloadTest, MessageType) { EXPECT_EQ(InfraredPayload::MessageType, 121); }
@@ -216,6 +256,38 @@ TEST(LastHevCycleResultPayloadTest, RoundTrip) {
     auto restored = UnpackFromBuffer<LastHevCycleResultPayload>(PackToBuffer(original));
 
     EXPECT_EQ(restored.result, 2);
+}
+
+TEST(GetColorZonesQueryPayloadTest, MessageType) { EXPECT_EQ(GetColorZonesPayload::MessageType, 502); }
+TEST(GetColorZonesQueryPayloadTest, RoundTrip) {
+    GetColorZonesPayload original;
+    original.start_index = 2;
+    original.end_index   = 6;
+
+    auto restored = UnpackFromBuffer<GetColorZonesPayload>(PackToBuffer(original));
+
+    EXPECT_EQ(restored.start_index, 2);
+    EXPECT_EQ(restored.end_index, 6);
+}
+
+TEST(StateZonePayloadTest, MessageType) { EXPECT_EQ(StateZonePayload::MessageType, 503); }
+TEST(StateZonePayloadTest, RoundTrip) {
+    StateZonePayload original;
+    original.zones_count  = 16;
+    original.zone_index   = 4;
+    original.color.hue        = 1234;
+    original.color.saturation = 2345;
+    original.color.brightness = 3456;
+    original.color.kelvin     = 4567;
+
+    auto restored = UnpackFromBuffer<StateZonePayload>(PackToBuffer(original));
+
+    EXPECT_EQ(restored.zones_count, 16);
+    EXPECT_EQ(restored.zone_index, 4);
+    EXPECT_EQ(restored.color.hue, 1234);
+    EXPECT_EQ(restored.color.saturation, 2345);
+    EXPECT_EQ(restored.color.brightness, 3456);
+    EXPECT_EQ(restored.color.kelvin, 4567);
 }
 
 TEST(GetColorZonesPayloadTest, MessageType) { EXPECT_EQ(ColorZonesPayload::MessageType, 506); }
@@ -333,6 +405,30 @@ TEST(Get64PayloadTest, RoundTrip) {
     EXPECT_EQ(restored.x, 0);
     EXPECT_EQ(restored.y, 0);
     EXPECT_EQ(restored.width, 8);
+}
+
+TEST(State64PayloadTest, MessageType) { EXPECT_EQ(State64Payload::MessageType, 711); }
+TEST(State64PayloadTest, RoundTrip) {
+    State64Payload original;
+    original.tile_index = 1;
+    original.x            = 0;
+    original.y            = 0;
+    original.width        = 8;
+    for (std::size_t i = 0; i < original.colors.size(); ++i) {
+        original.colors[i].hue    = static_cast<std::uint16_t>(i * 5);
+        original.colors[i].kelvin = 3500;
+    }
+
+    auto restored = UnpackFromBuffer<State64Payload>(PackToBuffer(original));
+
+    EXPECT_EQ(restored.tile_index, 1);
+    EXPECT_EQ(restored.x, 0);
+    EXPECT_EQ(restored.y, 0);
+    EXPECT_EQ(restored.width, 8);
+    for (std::size_t i = 0; i < original.colors.size(); ++i) {
+        EXPECT_EQ(restored.colors[i].hue, original.colors[i].hue);
+        EXPECT_EQ(restored.colors[i].kelvin, original.colors[i].kelvin);
+    }
 }
 
 TEST(GetTileEffectPayloadTest, MessageType) { EXPECT_EQ(TileEffectPayload::MessageType, 720); }

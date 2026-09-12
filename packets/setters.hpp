@@ -195,6 +195,18 @@ class RPowerPayload : public BasePayload {
     std::uint16_t level;
 };
 
+// Button
+class ButtonConfigPayload : public BasePayload {
+  public:
+    ButtonConfigPayload();
+    static constexpr std::uint16_t MessageType = 910; // SetButtonConfig
+    void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
+    void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
+    std::uint16_t haptic_duration_ms;
+    HSBK          backlight_on_color;
+    HSBK          backlight_off_color;
+};
+
 // Tile
 class UserPositionPayload : public BasePayload {
   public:
@@ -222,6 +234,27 @@ class Set64Payload : public BasePayload {
     std::uint8_t                        width;
     std::uint32_t                       duration;
     std::array<HSBK, TILE_COLOR_COUNT>  colors;
+  private:
+    std::uint8_t reserved;
+};
+
+class CopyFrameBufferPayload : public BasePayload {
+  public:
+    CopyFrameBufferPayload();
+    static constexpr std::uint16_t MessageType = 716; // CopyFrameBuffer
+    void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
+    void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
+    std::uint8_t  tile_index;
+    std::uint8_t  length;
+    std::uint8_t  src_fb_index;
+    std::uint8_t  dst_fb_index;
+    std::uint8_t  src_x;
+    std::uint8_t  src_y;
+    std::uint8_t  dst_x;
+    std::uint8_t  dst_y;
+    std::uint8_t  width;
+    std::uint8_t  height;
+    std::uint32_t duration;
   private:
     std::uint8_t reserved;
 };
