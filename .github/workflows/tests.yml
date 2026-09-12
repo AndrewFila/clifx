@@ -29,7 +29,11 @@ jobs:
           {
             echo "## clifx test results"
             echo
-            echo '```'
-            tail -n 6 ctest_output.txt
-            echo '```'
+            if [ -f ctest_output.txt ]; then
+              echo '```'
+              tail -n 6 ctest_output.txt
+              echo '```'
+            else
+              echo "_No test output — an earlier step (configure/build) failed before tests ran._"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
