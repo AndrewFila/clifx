@@ -173,6 +173,34 @@ void EchoRequestPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t 
     payload = read<std::array<std::uint8_t, ECHO_PAYLOAD_LENGTH>>(buffer, offset);
 }
 
+// ── EchoResponsePayload ───────────────────────────────────────────────────────
+
+EchoResponsePayload::EchoResponsePayload() : payload{} {}
+
+void EchoResponsePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
+    write(buffer, offset, payload);
+}
+
+void EchoResponsePayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    payload = read<std::array<std::uint8_t, ECHO_PAYLOAD_LENGTH>>(buffer, offset);
+}
+
+// ── ButtonConfigPayload (StateButtonConfig) ──────────────────────────────────
+
+ButtonConfigPayload::ButtonConfigPayload() : haptic_duration_ms(0) {}
+
+void ButtonConfigPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
+    write(buffer, offset, haptic_duration_ms);
+    backlight_on_color.Pack(buffer, offset);
+    backlight_off_color.Pack(buffer, offset);
+}
+
+void ButtonConfigPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    haptic_duration_ms = read<std::uint16_t>(buffer, offset);
+    backlight_on_color.Unpack(buffer, offset);
+    backlight_off_color.Unpack(buffer, offset);
+}
+
 // ── ColorPayload (LightState) ─────────────────────────────────────────────────
 
 ColorPayload::ColorPayload()
@@ -192,6 +220,18 @@ void ColorPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offse
     power   = read<std::uint16_t>(buffer, offset);
     label   = read<std::array<char, LABEL_LENGTH>>(buffer, offset);
     offset += sizeof(std::uint64_t);                       // reserved2
+}
+
+// ── LightPowerPayload (StateLightPower) ──────────────────────────────────────
+
+LightPowerPayload::LightPowerPayload() : level(0) {}
+
+void LightPowerPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
+    write(buffer, offset, level);
+}
+
+void LightPowerPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    level = read<std::uint16_t>(buffer, offset);
 }
 
 // ── InfraredPayload ───────────────────────────────────────────────────────────
@@ -247,6 +287,36 @@ void LastHevCycleResultPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &
 
 void LastHevCycleResultPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
     result = read<std::uint8_t>(buffer, offset);
+}
+
+// ── GetColorZonesPayload ─────────────────────────────────────────────────────
+
+GetColorZonesPayload::GetColorZonesPayload() : start_index(0), end_index(0) {}
+
+void GetColorZonesPayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
+    write(buffer, offset, start_index);
+    write(buffer, offset, end_index);
+}
+
+void GetColorZonesPayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    start_index = read<std::uint8_t>(buffer, offset);
+    end_index   = read<std::uint8_t>(buffer, offset);
+}
+
+// ── StateZonePayload ──────────────────────────────────────────────────────────
+
+StateZonePayload::StateZonePayload() : zones_count(0), zone_index(0) {}
+
+void StateZonePayload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
+    write(buffer, offset, zones_count);
+    write(buffer, offset, zone_index);
+    color.Pack(buffer, offset);
+}
+
+void StateZonePayload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    zones_count = read<std::uint8_t>(buffer, offset);
+    zone_index  = read<std::uint8_t>(buffer, offset);
+    color.Unpack(buffer, offset);
 }
 
 // ── ColorZonesPayload (StateMultiZone) ────────────────────────────────────────
@@ -364,6 +434,29 @@ void Get64Payload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offse
     x          = read<std::uint8_t>(buffer, offset);
     y          = read<std::uint8_t>(buffer, offset);
     width      = read<std::uint8_t>(buffer, offset);
+}
+
+// ── State64Payload ────────────────────────────────────────────────────────────
+
+State64Payload::State64Payload()
+    : tile_index(0), x(0), y(0), width(0), colors{}, reserved(0) {}
+
+void State64Payload::Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const {
+    write(buffer, offset, tile_index);
+    write(buffer, offset, static_cast<std::uint8_t>(0)); // reserved
+    write(buffer, offset, x);
+    write(buffer, offset, y);
+    write(buffer, offset, width);
+    for (const auto &hsbk : colors) { hsbk.Pack(buffer, offset); }
+}
+
+void State64Payload::Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) {
+    tile_index = read<std::uint8_t>(buffer, offset);
+    offset    += sizeof(std::uint8_t);                    // reserved
+    x          = read<std::uint8_t>(buffer, offset);
+    y          = read<std::uint8_t>(buffer, offset);
+    width      = read<std::uint8_t>(buffer, offset);
+    for (auto &hsbk : colors) { hsbk.Unpack(buffer, offset); }
 }
 
 // ── TileEffectPayload (StateTileEffect) ───────────────────────────────────────

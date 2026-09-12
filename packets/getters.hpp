@@ -126,6 +126,26 @@ class EchoRequestPayload : public BasePayload {
     std::array<std::uint8_t, ECHO_PAYLOAD_LENGTH> payload;
 };
 
+class EchoResponsePayload : public BasePayload {
+  public:
+    EchoResponsePayload();
+    static constexpr std::uint16_t MessageType = 59; // EchoResponse
+    void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
+    void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
+    std::array<std::uint8_t, ECHO_PAYLOAD_LENGTH> payload;
+};
+
+class ButtonConfigPayload : public BasePayload {
+  public:
+    ButtonConfigPayload();
+    static constexpr std::uint16_t MessageType = 911; // StateButtonConfig
+    void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
+    void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
+    std::uint16_t haptic_duration_ms;
+    HSBK          backlight_on_color;
+    HSBK          backlight_off_color;
+};
+
 // Light
 class ColorPayload : public BasePayload {
   public:
@@ -139,6 +159,15 @@ class ColorPayload : public BasePayload {
   private:
     std::int16_t  reserved1;
     std::uint64_t reserved2;
+};
+
+class LightPowerPayload : public BasePayload {
+  public:
+    LightPowerPayload();
+    static constexpr std::uint16_t MessageType = 118; // StateLightPower
+    void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
+    void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
+    std::uint16_t level;
 };
 
 class InfraredPayload : public BasePayload {
@@ -181,6 +210,27 @@ class LastHevCycleResultPayload : public BasePayload {
 };
 
 // MultiZone
+class GetColorZonesPayload : public BasePayload {
+  public:
+    GetColorZonesPayload();
+    static constexpr std::uint16_t MessageType = 502; // GetColorZones
+    void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
+    void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
+    std::uint8_t start_index;
+    std::uint8_t end_index;
+};
+
+class StateZonePayload : public BasePayload {
+  public:
+    StateZonePayload();
+    static constexpr std::uint16_t MessageType = 503; // StateZone
+    void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
+    void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
+    std::uint8_t zones_count;
+    std::uint8_t zone_index;
+    HSBK         color;
+};
+
 class ColorZonesPayload : public BasePayload {
   public:
     ColorZonesPayload();
@@ -255,6 +305,21 @@ class Get64Payload : public BasePayload {
     std::uint8_t x;
     std::uint8_t y;
     std::uint8_t width;
+  private:
+    std::uint8_t reserved;
+};
+
+class State64Payload : public BasePayload {
+  public:
+    State64Payload();
+    static constexpr std::uint16_t MessageType = 711; // State64
+    void Pack(std::vector<std::uint8_t> &buffer, size_t &offset) const override;
+    void Unpack(const std::vector<std::uint8_t> &buffer, size_t &offset) override;
+    std::uint8_t                        tile_index;
+    std::uint8_t                        x;
+    std::uint8_t                        y;
+    std::uint8_t                        width;
+    std::array<HSBK, TILE_COLOR_COUNT>  colors;
   private:
     std::uint8_t reserved;
 };

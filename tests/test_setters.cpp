@@ -272,6 +272,24 @@ TEST(SetRPowerPayloadTest, RoundTrip) {
     EXPECT_EQ(restored.level, 12345);
 }
 
+TEST(SetButtonConfigPayloadTest, MessageType) { EXPECT_EQ(ButtonConfigPayload::MessageType, 910); }
+TEST(SetButtonConfigPayloadTest, RoundTrip) {
+    ButtonConfigPayload original;
+    original.haptic_duration_ms         = 300;
+    original.backlight_on_color.hue     = 50;
+    original.backlight_on_color.kelvin  = 3200;
+    original.backlight_off_color.hue    = 150;
+    original.backlight_off_color.kelvin = 4000;
+
+    auto restored = UnpackFromBuffer<ButtonConfigPayload>(PackToBuffer(original));
+
+    EXPECT_EQ(restored.haptic_duration_ms, 300);
+    EXPECT_EQ(restored.backlight_on_color.hue, 50);
+    EXPECT_EQ(restored.backlight_on_color.kelvin, 3200);
+    EXPECT_EQ(restored.backlight_off_color.hue, 150);
+    EXPECT_EQ(restored.backlight_off_color.kelvin, 4000);
+}
+
 TEST(UserPositionPayloadTest, MessageType) { EXPECT_EQ(UserPositionPayload::MessageType, 703); }
 TEST(UserPositionPayloadTest, RoundTrip) {
     UserPositionPayload original;
@@ -312,6 +330,36 @@ TEST(Set64PayloadTest, RoundTrip) {
         EXPECT_EQ(restored.colors[i].hue, original.colors[i].hue);
         EXPECT_EQ(restored.colors[i].kelvin, original.colors[i].kelvin);
     }
+}
+
+TEST(CopyFrameBufferPayloadTest, MessageType) { EXPECT_EQ(CopyFrameBufferPayload::MessageType, 716); }
+TEST(CopyFrameBufferPayloadTest, RoundTrip) {
+    CopyFrameBufferPayload original;
+    original.tile_index   = 1;
+    original.length        = 2;
+    original.src_fb_index  = 0;
+    original.dst_fb_index  = 1;
+    original.src_x         = 3;
+    original.src_y         = 4;
+    original.dst_x         = 5;
+    original.dst_y         = 6;
+    original.width         = 8;
+    original.height        = 8;
+    original.duration      = 250;
+
+    auto restored = UnpackFromBuffer<CopyFrameBufferPayload>(PackToBuffer(original));
+
+    EXPECT_EQ(restored.tile_index, 1);
+    EXPECT_EQ(restored.length, 2);
+    EXPECT_EQ(restored.src_fb_index, 0);
+    EXPECT_EQ(restored.dst_fb_index, 1);
+    EXPECT_EQ(restored.src_x, 3);
+    EXPECT_EQ(restored.src_y, 4);
+    EXPECT_EQ(restored.dst_x, 5);
+    EXPECT_EQ(restored.dst_y, 6);
+    EXPECT_EQ(restored.width, 8);
+    EXPECT_EQ(restored.height, 8);
+    EXPECT_EQ(restored.duration, 250U);
 }
 
 TEST(SetTileEffectPayloadTest, MessageType) { EXPECT_EQ(TileEffectPayload::MessageType, 719); }
