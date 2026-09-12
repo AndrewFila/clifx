@@ -1,0 +1,39 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        working-directory: build
+        run: ctest --output-on-failure | tee ctest_output.txt
+
+      - name: Summarize results
+        if: always()
+        working-directory: build
+        run: |
+          {
+            echo "## clifx test results"
+            echo
+            if [ -f ctest_output.txt ]; then
+              echo '```'
+              tail -n 6 ctest_output.txt
+              echo '```'
+            else
+              echo "_No test output — an earlier step (configure/build) failed before tests ran._"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

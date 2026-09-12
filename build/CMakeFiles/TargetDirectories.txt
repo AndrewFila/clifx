@@ -1,7 +1,0 @@
-/home/andrew/projects/clifx/build/CMakeFiles/edit_cache.dir
-/home/andrew/projects/clifx/build/CMakeFiles/rebuild_cache.dir
-/home/andrew/projects/clifx/build/utils/CMakeFiles/edit_cache.dir
-/home/andrew/projects/clifx/build/utils/CMakeFiles/rebuild_cache.dir
-/home/andrew/projects/clifx/build/packets/CMakeFiles/packets.dir
-/home/andrew/projects/clifx/build/packets/CMakeFiles/edit_cache.dir
-/home/andrew/projects/clifx/build/packets/CMakeFiles/rebuild_cache.dir
