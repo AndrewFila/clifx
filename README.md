@@ -1,106 +1,90 @@
 # clifx
 
-[![Build](https://github.com/AndrewFila/clifx/actions/workflows/build.yml/badge.svg)](https://github.com/AndrewFila/clifx/actions/workflows/build.yml)
-
+[![Build](https://github.com/AndrewFila/clifx/actions/workflows/build.yaml/badge.svg)](https://github.com/AndrewFila/clifx/actions/workflows/build.yaml)
 [![Tests](https://github.com/AndrewFila/clifx/actions/workflows/tests.yml/badge.svg)](https://github.com/AndrewFila/clifx/actions/workflows/tests.yml)
-
 [![Coverage](https://codecov.io/gh/AndrewFila/clifx/badge.svg)](https://codecov.io/gh/AndrewFila/clifx)
-
-[![License: GPL-3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](LICENSE)
-
 [![Release](https://img.shields.io/github/v/release/AndrewFila/clifx)](https://github.com/AndrewFila/clifx/releases)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 
-**Testing**
+A C++20 library for the [LIFX LAN protocol](https://lan.developer.lifx.com/docs).
+It builds and parses the packets LIFX bulbs send and receive over your local
+network, with no cloud account and no LIFX app involved.
 
-Every `Pack`/`Unpack` implementation is covered by a GoogleTest round-trip test (pack a value, unpack it back, assert the fields survived), plus targeted tests for the trickier bits — `FrameHeader`'s bit-packed protocol/addressable/tagged/origin word, `FrameAddress`'s reserved-byte zeroing, and `Packet`'s size-field patching. As of the last update: **118 tests, 100% passing** across the `Utils::Packable` helpers, every `packets/base.hpp` type, and every `CLifx::Get::*` / `CLifx::Set::*` payload. The badge above reflects the live status of the `main` branch.
+clifx only does the bytes. It has no sockets, no discovery loop and no CLI,
+so the same code can run on a desktop over POSIX sockets or on a
+microcontroller over lwIP. You bring the transport.
 
-Tests run automatically on every push/PR via GitHub Actions (`.github/workflows/tests.yml`). To run them locally:
+## Example
 
-```sh
-cmake -B build
-cmake --build build
-cd build && ctest --output-on-failure
-```
-
-GoogleTest is fetched automatically via CMake `FetchContent` — no manual setup needed. If clifx is pulled in as a dependency of another project (via `add_subdirectory`), tests are skipped by default; set `CLIFX_BUILD_TESTS=ON` to force them.
-
-**Description**
-
-clifx is a C++20 implementation of the [LIFX LAN protocol](https://lan.developer.lifx.com/docs) message layer — it packs and unpacks LIFX packets to and from raw byte buffers.
-
-clifx is a **library only**. It has no networking code, no sockets, and no CLI — it just builds and parses the bytes that go on the wire. This is intentional: a byte-packing library can be shared as-is between very different consumers (a desktop CLI over POSIX sockets, an ESP32 device over lwIP, etc.), each of which owns its own transport layer.
-
-**What's in the repo**
-
-- `utils/packable.hpp` — the `Utils::Packable` interface (`Pack`/`Unpack`) and the `read`/`write` byte helpers every packet type is built on.
-- `packets/base.hpp` / `base.cpp` — the LIFX frame layout: `FrameHeader`, `FrameAddress`, `ProtocolHeader`, `Header`, `Packet`, plus shared value types `HSBK` (hue/saturation/brightness/kelvin) and `Tile`.
-- `packets/getters.hpp` / `getters.cpp` — `CLifx::Get::*` payloads: the `State*` responses devices send back (e.g. `StatePower`, `StateColor`/`LightState`, `StateGroup`).
-- `packets/setters.hpp` / `setters.cpp` — `CLifx::Set::*` payloads: the `Set*` commands you send to a device (e.g. `SetPower`, `SetColor`, `SetWaveform`).
-
-Getters and setters are split into separate `Get`/`Set` namespaces because several message pairs share a name (both a `Get::PowerPayload` and a `Set::PowerPayload` exist, for the `StatePower` and `SetPower` messages respectively).
-
-**Building**
-
-```sh
-cmake -B build
-cmake --build build
-```
-
-This produces `libpackets.a` (the actual sources) behind an `INTERFACE` target named `clifx`. `CMakeLists.txt` exposes the repo root as a public include directory, so a consuming project can point at this repo (as a subdirectory, submodule, or installed package), `target_link_libraries(your_target PRIVATE clifx)`, and include headers as shown below.
-
-**Usage**
-
-Every packet type implements `Pack(buffer, offset)` / `Unpack(buffer, offset)`. Fields must be read/written in the order they're declared in the header — the wire format is positional, not named.
-
-_Building a `SetColor` packet:_
+Turn every light on the network red:
 
 ```cpp
-#include "packets/setters.hpp"
+#include "setters.hpp"
 #include <vector>
 
-int main() {
-    CLifx::Packet pkt;
-    pkt.header.frame_header.tagged = true;      // true = broadcast to all devices
-    pkt.header.frame_header.source = 0x12345678; // arbitrary ID identifying this client
+CLifx::Packet pkt;
+pkt.header.frame_header.tagged = true;       // broadcast to all devices
+pkt.header.frame_header.source = 0x12345678; // any ID for this client
 
-    auto *payload      = pkt.setPayload<CLifx::Set::ColorPayload>();
-    payload->color.hue        = 0;       // 0   =   0° (red)
-    payload->color.saturation = 0xFFFF;  // full saturation
-    payload->color.brightness = 0xFFFF;  // full brightness
-    payload->color.kelvin     = 3500;
-    payload->duration         = 1000;    // ms to transition over
+auto *color = pkt.setPayload<CLifx::Set::ColorPayload>();
+color->color.hue        = 0;      // red
+color->color.saturation = 0xFFFF;
+color->color.brightness = 0xFFFF;
+color->color.kelvin     = 3500;
+color->duration         = 1000;   // fade over 1 second
 
-    std::vector<std::uint8_t> buffer;
-    std::size_t offset = 0;
-    pkt.Pack(buffer, offset);
-    // buffer now holds a complete LIFX packet ready to send over UDP
-    // to 255.255.255.255:56700 (broadcast) or a device's IP:56700.
-}
+std::vector<std::uint8_t> buffer;
+std::size_t offset = 0;
+pkt.Pack(buffer, offset);
+// send buffer over UDP to 255.255.255.255:56700
 ```
 
-_Parsing a received `StateService` (discovery) response:_
+Reading a reply works the other way around. Unpack the header first, check
+the message type, then unpack the payload that matches it:
 
 ```cpp
-#include "packets/getters.hpp"
+#include "getters.hpp"
 
 void handleResponse(const std::vector<std::uint8_t> &buffer) {
     CLifx::Packet pkt;
     std::size_t offset = 0;
-    pkt.header.Unpack(buffer, offset); // unpack the header first...
+    pkt.header.Unpack(buffer, offset);
 
     if (pkt.header.protocol_header.type == CLifx::Get::ServicePayload::MessageType) {
         CLifx::Get::ServicePayload service;
-        service.Unpack(buffer, offset); // ...then the payload that follows it
-        // service.port now holds the device's service port
+        service.Unpack(buffer, offset);
+        // service.port is the device's service port
     }
 }
 ```
 
-`Packet::Unpack` will also unpack `payload` for you, but only if one is already assigned — since the payload type depends on the message type read from the header, unpack the header first, look at `protocol_header.type`, then construct and unpack the matching payload (as above), or assign `pkt.payload` yourself before calling `pkt.Unpack(...)` if you already know the type.
+`Packet::Unpack` will also unpack the payload for you if you've already
+assigned one, which is handy when you know what type of reply to expect.
 
-**Message types**
+## Using it in your project
 
-A representative sample of what's implemented — see `packets/getters.hpp` / `packets/setters.hpp` for the full list, including MultiZone and Tile messages.
+With CMake's `FetchContent`:
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(clifx
+  GIT_REPOSITORY https://github.com/AndrewFila/clifx.git
+  GIT_TAG v1.1.0)
+FetchContent_MakeAvailable(clifx)
+
+target_link_libraries(your_target PRIVATE clifx)
+```
+
+`add_subdirectory` on a submodule or checkout works the same way. The tests
+are skipped when clifx is pulled into another project; set
+`CLIFX_BUILD_TESTS=ON` if you want them.
+
+## What's supported
+
+Messages are split into `CLifx::Set::` (commands you send) and `CLifx::Get::`
+(the `State*` replies devices send back). Several pairs share a name, like
+`Set::PowerPayload` and `Get::PowerPayload`, which is why they live in
+separate namespaces.
 
 | Purpose                | Set (`CLifx::Set::`)           | State (`CLifx::Get::`)                                  |
 | ---------------------- | ------------------------------ | ------------------------------------------------------- |
@@ -116,16 +100,41 @@ A representative sample of what's implemented — see `packets/getters.hpp` / `p
 | Tile framebuffer       | `CopyFrameBufferPayload` (716) | `State64Payload` (711)                                  |
 | Button config (Switch) | `ButtonConfigPayload` (910)    | `ButtonConfigPayload` (911)                             |
 
-`ButtonConfigPayload` (910/911) covers the LIFX Switch's per-device haptic feedback duration and on/off backlight colors.
+That's a sample. `packets/getters.hpp` and `packets/setters.hpp` have the
+full list, including the rest of the MultiZone and Tile messages.
 
-**Not included (by design)**
+## Layout
 
-- Sockets / UDP transport — bring your own (POSIX sockets, lwIP, etc.)
-- Device discovery logic — build it on top of `Get::ServicePayload`
-- A CLI or GUI — see the companion `clifx-cli` project
+- `utils/packable.hpp`: the `Pack`/`Unpack` interface and byte helpers
+  everything is built on
+- `packets/base.hpp`: the frame layout (`FrameHeader`, `FrameAddress`,
+  `ProtocolHeader`, `Packet`) and shared types like `HSBK` and `Tile`
+- `packets/getters.hpp`: `CLifx::Get::*` reply payloads
+- `packets/setters.hpp`: `CLifx::Set::*` command payloads
 
-**Future plans**
+Fields are packed in the order they're declared. The wire format is
+positional, so the order in the headers matters.
 
-- Round out remaining LIFX message payloads not yet covered.
-- A separate `clifx-cli` project (POSIX sockets) that depends on this library.
-- A separate `clifx-hw-esp32` project (lwIP) that depends on this library.
+## Building and testing
+
+```sh
+cmake -B build
+cmake --build build
+cd build && ctest --output-on-failure
+```
+
+GoogleTest is fetched automatically. Every payload has a round-trip test
+(pack it, unpack it, check nothing changed), plus tests for the fiddly parts:
+the bit-packed fields in `FrameHeader`, the reserved bytes in `FrameAddress`
+and the size field in `Packet`. CI also runs sanitizers, clang-tidy and
+clang-format on every push.
+
+## Related
+
+- [clifx-hw-esp32](https://github.com/AndrewFila/clifx-hw-esp32): a
+  hardware light controller on an ESP32, still early
+- clifx-tui: a terminal UI for your lights, coming soon
+
+## License
+
+GPL-3.0
